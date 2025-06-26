@@ -123,7 +123,7 @@
             <label class="block mb-1">
               <input type="checkbox" class="mr-2"> Souhlasím se zpracováním osobních údajů
             </label>
-            <button onclick="showCelebration()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded">Odeslat</button>
+            <button onclick="odeslatFormular()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded">Odeslat</button>
           `;
         } else if (step.customForm) {
           container.innerHTML = `
@@ -196,6 +196,24 @@
         location.reload();
       }, 3000);
     }
-  </script>
-</body>
-</html>
+
+    async function odeslatDoSheetu(data) {
+      const url = "https://script.google.com/macros/s/AKfycbxiA9RVJbKfzVgxI40pdUY7GzLY-gU7UFFBzMzrDckJ9nCOvrE-eQnSzHdMLNfnXv0edA/exec";
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: { "Content-Type": "application/json" }
+        });
+        if (!response.ok) throw new Error(response.status);
+        console.log("Odesláno do Google Sheets");
+      } catch (error) {
+        console.error("Chyba při odeslání dat:", error);
+      }
+    }
+
+    function odeslatFormular() {
+      const jmeno = document.querySelector('input[placeholder="Jméno a příjmení"]').value;
+      const email = document.querySelector('input[placeholder="E-mail"]').value;
+      const telefon = document.querySelector('input[placeholder="Telefon"]').
