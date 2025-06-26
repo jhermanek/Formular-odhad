@@ -24,183 +24,23 @@
     }
     .progress-bar {
       height: 10px;
-      background-color: #e5e7eb;
+      background-color: #1f2937;
       border-radius: 9999px;
       overflow: hidden;
       margin-bottom: 1rem;
     }
     .progress-bar-inner {
       height: 100%;
-      background-color: #10b981;
+      background-color: #22c55e;
       width: 0%;
       transition: width 0.3s ease-in-out;
     }
   </style>
 </head>
-<body class="bg-green-600 min-h-screen flex items-center justify-center">
-  <div class="relative w-full max-w-2xl bg-white text-black p-8 rounded-xl shadow-2xl overflow-hidden">
-    <h1 class="text-3xl font-bold mb-2 text-center text-green-800">Zjistěte za kolik se dá prodat Vaše nemovitost</h1>
-    <p class="text-center mb-6 text-gray-700">Vyplňte několik jednoduchých otázek a získejte nezávazný odhad do 24 hodin.</p>
-
-    <div class="progress-bar">
-      <div id="progressBar" class="progress-bar-inner"></div>
-    </div>
-
-    <div id="step1" class="slide active">
-      <p class="mb-4 font-semibold text-lg">Jaký typ nemovitosti chcete ocenit?</p>
-      <div class="grid grid-cols-2 gap-4">
-        <button onclick="setValueAndNext('typ', 'byt', 'step_byt_dispozice', 'step1')" class="border p-4 rounded-lg hover:bg-green-100">Byt</button>
-        <button onclick="setValueAndNext('typ', 'dum', 'step_dum_stav', 'step1')" class="border p-4 rounded-lg hover:bg-green-100">Rodinný dům</button>
-      </div>
-    </div>
-
-    <!-- VĚTVE BYT -->
-    <div id="step_byt_dispozice" class="slide">
-      <p class="mb-4 font-semibold text-lg">Jaká je dispozice bytu?</p>
-      <div class="grid grid-cols-2 gap-4">
-        <button onclick="setValueAndNext('dispozice', '1+kk', 'step_byt_velikost', 'step_byt_dispozice')" class="border p-4 rounded-lg hover:bg-green-100">1+kk</button>
-        <button onclick="setValueAndNext('dispozice', '1+1', 'step_byt_velikost', 'step_byt_dispozice')" class="border p-4 rounded-lg hover:bg-green-100">1+1</button>
-        <button onclick="setValueAndNext('dispozice', '2+kk', 'step_byt_velikost', 'step_byt_dispozice')" class="border p-4 rounded-lg hover:bg-green-100">2+kk</button>
-        <button onclick="setValueAndNext('dispozice', '2+1', 'step_byt_velikost', 'step_byt_dispozice')" class="border p-4 rounded-lg hover:bg-green-100">2+1</button>
-        <button onclick="setValueAndNext('dispozice', '3+kk', 'step_byt_velikost', 'step_byt_dispozice')" class="border p-4 rounded-lg hover:bg-green-100">3+kk</button>
-        <button onclick="setValueAndNext('dispozice', '3+1 a více', 'step_byt_velikost', 'step_byt_dispozice')" class="border p-4 rounded-lg hover:bg-green-100">3+1 a více</button>
-      </div>
-    </div>
-
-    <div id="step_byt_velikost" class="slide">
-      <p class="mb-4 font-semibold text-lg">Jaká je výměra bytu v m²?</p>
-      <div class="grid grid-cols-2 gap-4">
-        <button onclick="setValueAndNext('velikost', 'do 40 m²', 'step_byt_lokalita', 'step_byt_velikost')" class="border p-4 rounded-lg hover:bg-green-100">do 40 m²</button>
-        <button onclick="setValueAndNext('velikost', '40-60 m²', 'step_byt_lokalita', 'step_byt_velikost')" class="border p-4 rounded-lg hover:bg-green-100">40–60 m²</button>
-        <button onclick="setValueAndNext('velikost', '60-80 m²', 'step_byt_lokalita', 'step_byt_velikost')" class="border p-4 rounded-lg hover:bg-green-100">60–80 m²</button>
-        <button onclick="setValueAndNext('velikost', '80+ m²', 'step_byt_lokalita', 'step_byt_velikost')" class="border p-4 rounded-lg hover:bg-green-100">80+ m²</button>
-      </div>
-    </div>
-
-    <div id="step_byt_lokalita" class="slide">
-      <p class="mb-4 font-semibold text-lg">Kde se byt nachází?</p>
-      <input type="text" placeholder="Např. Praha, Brno, Ostrava..." class="w-full p-2 mb-4 border rounded">
-      <div class="flex gap-4">
-        <button onclick="goBack()" class="bg-gray-300 text-black px-4 py-2 rounded">Zpět</button>
-        <button onclick="setValueAndNext('lokalita', 'zadano', 'step_byt_stav', 'step_byt_lokalita')" class="bg-green-600 text-white px-4 py-2 rounded">Pokračovat</button>
-      </div>
-    </div>
-
-    <div id="step_byt_stav" class="slide">
-      <p class="mb-4 font-semibold text-lg">V jakém je byt stavu?</p>
-      <div class="grid grid-cols-2 gap-4">
-        <button onclick="setValueAndNext('stav', 'novostavba', 'step_byt_ucel', 'step_byt_stav')" class="border p-4 rounded-lg hover:bg-green-100">Novostavba</button>
-        <button onclick="setValueAndNext('stav', 'po rekonstrukci', 'step_byt_ucel', 'step_byt_stav')" class="border p-4 rounded-lg hover:bg-green-100">Po rekonstrukci</button>
-        <button onclick="setValueAndNext('stav', 'původní stav', 'step_byt_ucel', 'step_byt_stav')" class="border p-4 rounded-lg hover:bg-green-100">Původní stav</button>
-      </div>
-    </div>
-
-    <div id="step_byt_ucel" class="slide">
-      <p class="mb-4 font-semibold text-lg">Z jakého důvodu chcete znát odhad?</p>
-      <div class="grid grid-cols-2 gap-4">
-        <button onclick="setValueAndNext('ucel', 'prodej', 'step_byt_termin', 'step_byt_ucel')" class="border p-4 rounded-lg hover:bg-green-100">Prodej</button>
-        <button onclick="setValueAndNext('ucel', 'dědictví', 'step_byt_termin', 'step_byt_ucel')" class="border p-4 rounded-lg hover:bg-green-100">Dědictví</button>
-        <button onclick="setValueAndNext('ucel', 'ze zajímavosti', 'step_byt_termin', 'step_byt_ucel')" class="border p-4 rounded-lg hover:bg-green-100">Pouze ze zajímavosti</button>
-      </div>
-    </div>
-
-    <div id="step_byt_termin" class="slide">
-      <p class="mb-4 font-semibold text-lg">Kdy plánujete prodat?</p>
-      <div class="grid grid-cols-2 gap-4">
-        <button onclick="setValueAndNext('termin', 'ihned', 'step_final', 'step_byt_termin')" class="border p-4 rounded-lg hover:bg-green-100">Ihned</button>
-        <button onclick="setValueAndNext('termin', 'do 3 měsíců', 'step_final', 'step_byt_termin')" class="border p-4 rounded-lg hover:bg-green-100">Do 3 měsíců</button>
-        <button onclick="setValueAndNext('termin', 'do 6 měsíců', 'step_final', 'step_byt_termin')" class="border p-4 rounded-lg hover:bg-green-100">Do 6 měsíců</button>
-        <button onclick="setValueAndNext('termin', 'nespěchám', 'step_final', 'step_byt_termin')" class="border p-4 rounded-lg hover:bg-green-100">Nespěchám</button>
-      </div>
-    </div><script>
-let historyStack = [];
-let totalSteps = document.querySelectorAll('.slide').length;
-let currentStepIndex = 0;
-
-function updateProgressBar() {
-  const progress = document.getElementById('progressBar');
-  const percent = Math.round((currentStepIndex / (totalSteps - 1)) * 100);
-  progress.style.width = percent + '%';
-}
-
-function setValueAndNext(field, value, nextStepId, currentStepId) {
-  const currentStep = document.getElementById(currentStepId);
-  const nextStep = document.getElementById(nextStepId);
-  if (!currentStep || !nextStep) return;
-  currentStep.classList.remove('active');
-  currentStep.classList.add('exit');
-  nextStep.classList.add('active');
-  nextStep.classList.remove('exit');
-  historyStack.push(currentStepId);
-  currentStepIndex++;
-  updateProgressBar();
-}
-
-function goBack() {
-  const currentStep = document.querySelector('.slide.active');
-  if (historyStack.length > 0) {
-    const previousStepId = historyStack.pop();
-    const previousStep = document.getElementById(previousStepId);
-    currentStep.classList.remove('active');
-    previousStep.classList.add('active');
-    currentStepIndex--;
-    updateProgressBar();
-  }
-}
-
-function showThanks() {
-  const currentStep = document.querySelector('.slide.active');
-  const thanksStep = document.getElementById('step_thanks');
-  currentStep.classList.remove('active');
-  thanksStep.classList.add('active');
-  currentStepIndex = totalSteps - 1;
-  updateProgressBar();
-}
-
-updateProgressBar();
-</script>
-    <html lang="cs">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ocenění nemovitosti</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <style>
-    .slide {
-      position: absolute;
-      width: 100%;
-      top: 0;
-      left: 100%;
-      opacity: 0;
-      transition: all 0.5s ease-in-out;
-    }
-    .slide.active {
-      left: 0;
-      opacity: 1;
-    }
-    .slide.exit {
-      left: -100%;
-      opacity: 0;
-    }
-    .progress-bar {
-      height: 10px;
-      background-color: #e5e7eb;
-      border-radius: 9999px;
-      overflow: hidden;
-      margin-bottom: 1rem;
-    }
-    .progress-bar-inner {
-      height: 100%;
-      background-color: #10b981;
-      width: 0%;
-      transition: width 0.3s ease-in-out;
-    }
-  </style>
-</head>
-<body class="bg-green-600 min-h-screen flex items-center justify-center">
-  <div class="relative w-full max-w-3xl bg-white text-black p-10 rounded-2xl shadow-2xl overflow-hidden">
-    <h1 class="text-4xl font-extrabold mb-4 text-center text-green-800">Zjistěte za kolik se dá prodat Vaše nemovitost</h1>
-    <p class="text-center mb-6 text-gray-700 text-lg">Vyplňte několik jednoduchých otázek a získejte nezávazný odhad do 24 hodin.</p>
+<body class="bg-black min-h-screen flex items-center justify-center">
+  <div class="relative w-full max-w-3xl bg-gray-900 text-white p-10 rounded-2xl shadow-2xl overflow-hidden">
+    <h1 class="text-4xl font-extrabold mb-4 text-center text-green-400">Zjistěte za kolik se dá prodat Vaše nemovitost</h1>
+    <p class="text-center mb-6 text-gray-300 text-lg">Vyplňte několik jednoduchých otázek a získejte nezávazný odhad do 24 hodin.</p>
 
     <div class="progress-bar">
       <div id="progressBar" class="progress-bar-inner"></div>
@@ -209,12 +49,12 @@ updateProgressBar();
     <div id="step1" class="slide active">
       <p class="mb-6 font-semibold text-xl text-center">Jaký typ nemovitosti chcete ocenit?</p>
       <div class="grid grid-cols-2 gap-6">
-        <button onclick="setValueAndNext('typ', 'byt', 'step_byt_dispozice', 'step1')" class="border p-6 rounded-xl hover:bg-green-100 transition-all">Byt</button>
-        <button onclick="setValueAndNext('typ', 'dum', 'step_dum_stav', 'step1')" class="border p-6 rounded-xl hover:bg-green-100 transition-all">Rodinný dům</button>
+        <button onclick="setValueAndNext('typ', 'byt', 'step_byt_dispozice', 'step1')" class="border border-green-400 text-green-400 p-6 rounded-xl hover:bg-green-800 transition-all">Byt</button>
+        <button onclick="setValueAndNext('typ', 'dum', 'step_dum_stav', 'step1')" class="border border-green-400 text-green-400 p-6 rounded-xl hover:bg-green-800 transition-all">Rodinný dům</button>
       </div>
     </div>
 
-    <!-- Ostatní kroky zůstanou nezměněné -->
+    <!-- Další kroky budeme doplňovat -->
 
   </div>
 
@@ -268,6 +108,3 @@ updateProgressBar();
 
 </body>
 </html>
-
-
-
