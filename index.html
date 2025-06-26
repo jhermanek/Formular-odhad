@@ -38,11 +38,6 @@
 
     const commonSteps = [
       {
-        title: 'Jaká je přibližná velikost Vaší nemovitosti?',
-        options: ['Do 50 m²', '50 - 100 m²', '100 - 200 m²', 'Nad 200 m²'],
-        progress: 43
-      },
-      {
         title: 'Kde se Vaše nemovitost nachází?',
         options: ['Hlavní město', 'Krajské město', 'Okresní město', 'Obec nebo vesnice'],
         progress: 57
@@ -66,7 +61,7 @@
 
     const introStep = {
       title: 'Jaký typ nemovitosti chcete ocenit?',
-      options: ['Byt', 'Rodinný dům'],
+      options: ['Byt', 'Rodinný dům', 'Pozemek'],
       progress: 14
     };
 
@@ -75,6 +70,11 @@
         title: 'Jaká je dispozice Vašeho bytu?',
         options: ['1+kk', '1+1', '2+kk', '2+1', '3+kk', '3+1', '4+kk a větší', 'Atypický'],
         progress: 29
+      },
+      {
+        title: 'Jaká je přibližná velikost Vaší nemovitosti?',
+        options: ['Do 50 m²', '50 - 100 m²', '100 - 200 m²', 'Nad 200 m²'],
+        progress: 43
       },
       ...commonSteps
     ];
@@ -85,7 +85,45 @@
         options: ['Řadový dům', 'Samostatný dům', 'Vícegenerační dům', 'Vila'],
         progress: 29
       },
+      {
+        title: 'Jaká je přibližná velikost Vaší nemovitosti?',
+        options: ['Do 50 m²', '50 - 100 m²', '100 - 200 m²', 'Nad 200 m²'],
+        progress: 43
+      },
       ...commonSteps
+    ];
+
+    const stepsPozemek = [
+      {
+        title: 'Jaký typ pozemku chcete ocenit?',
+        options: ['Stavební', 'Zemědělský', 'Louka', 'Les', 'Komerční'],
+        progress: 29
+      },
+      {
+        title: 'Jaká je přibližná velikost pozemku?',
+        options: ['Do 500 m²', '500 - 1000 m²', '1000 - 3000 m²', 'Nad 3000 m²'],
+        progress: 43
+      },
+      {
+        title: 'Jaké jsou dostupné sítě?',
+        options: ['Všechny sítě', 'Elektřina + voda', 'Pouze elektřina', 'Žádné sítě'],
+        progress: 57
+      },
+      {
+        title: 'Jaký je přístup k pozemku?',
+        options: ['Zpevněná cesta', 'Nezpevněná cesta', 'Bez přístupu'],
+        progress: 71
+      },
+      {
+        title: 'Uveďte katastrální území a číslo parcely',
+        customForm: true,
+        progress: 86
+      },
+      {
+        title: 'Zadejte své kontaktní údaje',
+        form: true,
+        progress: 100
+      }
     ];
 
     function renderStep(stepIndex) {
@@ -107,6 +145,13 @@
             <input type="checkbox" class="mr-2"> Souhlasím se zpracováním osobních údajů
           </label>
           <button class="mt-4 bg-green-600 text-white px-4 py-2 rounded">Odeslat</button>
+        `;
+      } else if (step.customForm) {
+        container.innerHTML = `
+          <p class="font-semibold mb-4">${step.title}</p>
+          <input type="text" placeholder="Katastrální území" class="w-full mb-3 p-2 border rounded">
+          <input type="text" placeholder="Číslo parcely" class="w-full mb-3 p-2 border rounded">
+          <button onclick="handleStep(${stepIndex + 1})" class="bg-green-600 text-white px-4 py-2 rounded">Pokračovat</button>
         `;
       } else {
         container.innerHTML = `
@@ -145,7 +190,9 @@
     function startForm(type) {
       selectedType = type;
       currentStep = 0;
-      steps = type === 'Byt' ? stepsByt : stepsDum;
+      if (type === 'Byt') steps = stepsByt;
+      else if (type === 'Rodinný dům') steps = stepsDum;
+      else if (type === 'Pozemek') steps = stepsPozemek;
       renderStep(currentStep);
     }
   </script>
