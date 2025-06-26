@@ -4,182 +4,159 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ocenění nemovitosti zdarma</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
     body {
-      background-image: url('https://images.unsplash.com/photo-1560184897-c0c9b8893aee');
+      background: url('https://images.unsplash.com/photo-1570129477492-45c003edd2be') no-repeat center center fixed;
       background-size: cover;
-      background-position: center;
-      font-family: 'Segoe UI', sans-serif;
     }
-    .progress-bar { height: 8px; background-color: #2d3748; border-radius: 9999px; }
-    .progress-fill { height: 100%; background-color: #48bb78; border-radius: 9999px; transition: width 0.3s ease-in-out; }
-    .card-selected { border: 2px solid #48bb78; }
+    .avatar {
+      width: 60px;
+      border-radius: 9999px;
+    }
+    .progress-bar { height: 10px; background-color: #e5e7eb; border-radius: 9999px; }
+    .progress-fill { height: 100%; background-color: #10b981; border-radius: 9999px; transition: width 0.3s ease-in-out; }
     .fade-enter { opacity: 0; transform: translateY(20px); }
-    .fade-enter-active { opacity: 1; transform: translateY(0); transition: opacity 0.4s ease-out, transform 0.4s ease-out; }
-    #intro-screen {
-      background: rgba(0,0,0,0.7);
-      padding: 2rem;
-      border-radius: 1rem;
-      text-align: center;
-      max-width: 600px;
-      margin: 10vh auto;
-      color: white;
-    }
-    #fireworks {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: 1000;
-    }
-    canvas { position: absolute; width: 100%; height: 100%; }
+    .fade-enter-active { opacity: 1; transform: translateY(0); transition: opacity 0.4s ease, transform 0.4s ease; }
   </style>
 </head>
-<body class="text-white">
-  <div id="intro-screen">
-    <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Logo baráčku" class="mx-auto w-24 mb-4">
-    <h1 class="text-3xl font-bold mb-4">Získejte zdarma odhad ceny Vaší nemovitosti!</h1>
-    <p class="mb-6">Vyplňte jednoduchý formulář a my se Vám do 24 hodin ozveme s cenou. Rychle, profesionálně a nezávazně.</p>
-    <button onclick="startIntro()" class="bg-green-500 hover:bg-green-600 px-6 py-2 rounded">Začít</button>
-  </div>
+<body class="bg-opacity-90 text-white">
+  <div class="max-w-3xl mx-auto py-10 px-6 bg-gray-900 bg-opacity-90 rounded-xl shadow-2xl">
+    <div class="flex items-center justify-between mb-4">
+      <h1 class="text-3xl font-bold text-green-400">Ocenění nemovitosti zdarma</h1>
+      <img src="https://cdn-icons-png.flaticon.com/512/1995/1995535.png" alt="avatar" class="avatar">
+    </div>
+    <p class="text-sm text-gray-300 mb-4">Zadejte několik údajů o své nemovitosti a my se vám do 24 hodin ozveme s odhadem její tržní ceny. Je to zdarma a nezávazné.</p>
 
-  <div class="max-w-3xl mx-auto py-10 px-4 hidden" id="main-form">
-    <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-      <div class="mb-4">
-        <div class="flex justify-between text-sm mb-1">
-          <span id="progress-text">Krok 1 z 7</span>
-          <span id="progress-percentage">14%</span>
-        </div>
-        <div class="progress-bar">
-          <div class="progress-fill" id="progress-fill" style="width: 14%"></div>
-        </div>
+    <div class="mb-4">
+      <div class="flex justify-between text-sm mb-1">
+        <span id="progress-text">Krok 1 z 7</span>
+        <span id="progress-percentage">14%</span>
       </div>
-      <div id="form-content" class="transition-all"></div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width: 14%"></div>
+      </div>
+    </div>
+
+    <div id="form-content"></div>
+
+    <div class="mt-6">
+      <button onclick="goBack()" class="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-600">Zpět</button>
     </div>
   </div>
 
-  <canvas id="fireworks" class="hidden"></canvas>
-
-  <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.1.0/dist/fireworks.js"></script>
   <script>
     let selectedType = '';
     let currentStep = 0;
     let steps = [];
+    const history = [];
 
     const commonSteps = [
-      { title: 'Kde se Vaše nemovitost nachází?', options: ['Hlavní město', 'Krajské město', 'Okresní město', 'Obec nebo vesnice'], progress: 57 },
-      { title: 'V jakém stavu je Vaše nemovitost?', options: ['Novostavba', 'Po rekonstrukci', 'Dobrý stav', 'K rekonstrukci'], progress: 71 },
-      { title: 'Kdy plánujete nemovitost prodat?', options: ['Co nejdříve', 'Do 3 měsíců', 'Do 6 měsíců', 'Zatím nevím'], progress: 86 },
-      { title: 'Zadejte své kontaktní údaje', form: true, progress: 100 }
+      { title: 'Kde se nachází nemovitost?', options: ['Hlavní město', 'Krajské město', 'Okresní město', 'Obec'], progress: 57 },
+      { title: 'Stav nemovitosti?', options: ['Novostavba', 'Rekonstruovaná', 'Dobrý stav', 'K rekonstrukci'], progress: 71 },
+      { title: 'Plánovaný prodej?', options: ['Co nejdříve', 'Do 3 měsíců', 'Do 6 měsíců', 'Zatím nevím'], progress: 86 },
+      { title: 'Zadejte kontaktní údaje', form: true, progress: 100 }
     ];
 
-    const introStep = {
-      title: 'Jaký typ nemovitosti chcete ocenit?',
-      options: ['Byt', 'Rodinný dům', 'Pozemek', 'Komerční nemovitost'],
-      progress: 14
-    };
+    const introStep = { title: 'Jaký typ nemovitosti chcete ocenit?', options: ['Byt', 'Rodinný dům', 'Pozemek', 'Komerční nemovitost'], progress: 14 };
 
     const stepsByt = [
-      { title: 'Jaká je dispozice Vašeho bytu?', options: ['1+kk', '1+1', '2+kk', '2+1', '3+kk', '3+1', '4+kk a větší', 'Atypický'], progress: 29 },
-      { title: 'Jaká je přibližná velikost Vaší nemovitosti?', options: ['Do 50 m²', '50 - 100 m²', '100 - 200 m²', 'Nad 200 m²'], progress: 43 },
+      { title: 'Dispozice bytu?', options: ['1+kk', '2+kk', '3+1', '4+kk a více'], progress: 29 },
+      { title: 'Velikost?', options: ['Do 50 m²', '50–100 m²', '100–200 m²', 'Nad 200 m²'], progress: 43 },
       ...commonSteps
     ];
 
     const stepsDum = [
-      { title: 'Jaký typ domu chcete ocenit?', options: ['Řadový dům', 'Samostatný dům', 'Vícegenerační dům', 'Vila'], progress: 29 },
-      { title: 'Jaká je přibližná velikost Vaší nemovitosti?', options: ['Do 50 m²', '50 - 100 m²', '100 - 200 m²', 'Nad 200 m²'], progress: 43 },
+      { title: 'Typ domu?', options: ['Samostatný', 'Řadový', 'Vícegenerační', 'Vila'], progress: 29 },
+      { title: 'Velikost?', options: ['Do 50 m²', '50–100 m²', '100–200 m²', 'Nad 200 m²'], progress: 43 },
       ...commonSteps
     ];
 
     const stepsPozemek = [
-      { title: 'Jaký typ pozemku chcete ocenit?', options: ['Stavební', 'Zemědělský', 'Louka', 'Les', 'Komerční'], progress: 29 },
-      { title: 'Jaká je přibližná velikost pozemku?', options: ['Do 500 m²', '500 - 1000 m²', '1000 - 3000 m²', 'Nad 3000 m²'], progress: 43 },
-      { title: 'Jaké jsou dostupné sítě?', options: ['Všechny sítě', 'Elektřina + voda', 'Pouze elektřina', 'Žádné sítě'], progress: 57 },
-      { title: 'Jaký je přístup k pozemku?', options: ['Zpevněná cesta', 'Nezpevněná cesta', 'Bez přístupu'], progress: 71 },
-      { title: 'Uveďte katastrální území a číslo parcely', customForm: true, progress: 86 },
-      { title: 'Zadejte své kontaktní údaje', form: true, progress: 100 }
-    ];
-
-    const stepsKomerce = [
-      { title: 'Jaký typ komerční nemovitosti chcete ocenit?', options: ['Kancelář', 'Obchodní prostor', 'Sklad', 'Výrobní hala', 'Areál', 'Hotel / penzion', 'Jiné'], progress: 29 },
-      { title: 'Jaká je přibližná velikost nemovitosti?', options: ['Do 100 m²', '100 - 500 m²', '500 - 1000 m²', 'Nad 1000 m²'], progress: 43 },
+      { title: 'Typ pozemku?', options: ['Stavební', 'Zemědělský', 'Louka', 'Les'], progress: 29 },
+      { title: 'Velikost?', options: ['Do 500 m²', '500–1000 m²', '1000–3000 m²', 'Nad 3000 m²'], progress: 43 },
       ...commonSteps
     ];
 
-    function startIntro() {
-      document.getElementById('intro-screen').classList.add('hidden');
-      document.getElementById('main-form').classList.remove('hidden');
-      renderStep(0);
+    const stepsKomerce = [
+      { title: 'Typ komerční nemovitosti?', options: ['Kancelář', 'Obchod', 'Sklad', 'Výroba', 'Hotel'], progress: 29 },
+      { title: 'Velikost?', options: ['Do 100 m²', '100–500 m²', '500–1000 m²', 'Nad 1000 m²'], progress: 43 },
+      ...commonSteps
+    ];
+
+    function goBack() {
+      if (currentStep > 0) {
+        currentStep--;
+        renderStep(currentStep);
+      } else {
+        window.location.reload();
+      }
     }
 
-    function renderStep(stepIndex) {
+    function renderStep(index) {
       const container = document.getElementById('form-content');
-      const step = steps[stepIndex];
-      currentStep = stepIndex;
-      document.getElementById('progress-text').textContent = `Krok ${stepIndex + 1} z ${steps.length}`;
+      const step = steps[index];
+
+      document.getElementById('progress-text').textContent = `Krok ${index + 1} z ${steps.length}`;
       document.getElementById('progress-percentage').textContent = `${step.progress}%`;
       document.getElementById('progress-fill').style.width = `${step.progress}%`;
 
-      let backButton = stepIndex > 0 ? `<button onclick="renderStep(${stepIndex - 1})" class="mb-4 bg-gray-600 text-white px-3 py-1 rounded">Zpět</button>` : '';
-
       if (step.form) {
         container.innerHTML = `
-          ${backButton}
           <p class="font-semibold mb-4">${step.title}</p>
-          <input type="text" placeholder="Jméno a příjmení" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-          <input type="email" placeholder="E-mail" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-          <input type="tel" placeholder="Telefon" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-          <input type="text" placeholder="Upřesnění lokality (ulice, město, PSČ)" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-          <textarea placeholder="Popis lokality..." class="w-full mb-3 p-2 rounded bg-gray-700 text-white"></textarea>
-          <label class="block mb-1"><input type="checkbox" class="mr-2"> Souhlasím se zpracováním osobních údajů</label>
-          <button class="mt-4 bg-green-600 text-white px-4 py-2 rounded" onclick="showFireworks()">Odeslat</button>
-        `;
-      } else if (step.customForm) {
-        container.innerHTML = `
-          ${backButton}
-          <p class="font-semibold mb-4">${step.title}</p>
-          <input type="text" placeholder="Katastrální území" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-          <input type="text" placeholder="Číslo parcely" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-          <button onclick="renderStep(${stepIndex + 1})" class="bg-green-600 text-white px-4 py-2 rounded">Pokračovat</button>
+          <input type="text" placeholder="Jméno a příjmení" class="w-full mb-3 p-2 rounded bg-gray-800">
+          <input type="email" placeholder="E-mail" class="w-full mb-3 p-2 rounded bg-gray-800">
+          <input type="tel" placeholder="Telefon" class="w-full mb-3 p-2 rounded bg-gray-800">
+          <input type="text" placeholder="Adresa nemovitosti" class="w-full mb-3 p-2 rounded bg-gray-800">
+          <textarea placeholder="Další informace" class="w-full mb-3 p-2 rounded bg-gray-800"></textarea>
+          <label class="block mb-2"><input type="checkbox" class="mr-2">Souhlasím se zpracováním údajů</label>
+          <button onclick="finishForm()" class="bg-green-600 text-white px-4 py-2 rounded mt-2">Odeslat</button>
         `;
       } else {
         container.innerHTML = `
-          ${backButton}
           <p class="font-semibold mb-4">${step.title}</p>
           <div class="grid grid-cols-2 gap-4">
-            ${step.options.map(option => `<button onclick="renderStep(${stepIndex + 1})" class="border border-gray-600 p-3 rounded hover:bg-green-600 hover:text-white">${option}</button>`).join('')}
+            ${step.options.map(opt => `<button onclick="nextStep()" class="bg-gray-800 p-3 rounded hover:bg-green-600">${opt}</button>`).join('')}
           </div>
         `;
       }
     }
 
-    function showFireworks() {
-      const canvas = document.getElementById('fireworks');
-      canvas.classList.remove('hidden');
-      const fireworks = new Fireworks(canvas, { autoresize: true, opacity: 0.9 });
-      fireworks.start();
+    function nextStep() {
+      if (currentStep < steps.length - 1) {
+        currentStep++;
+        renderStep(currentStep);
+      }
+    }
 
+    function finishForm() {
       document.getElementById('form-content').innerHTML = `
-        <div class="text-center mt-10">
-          <h2 class="text-2xl font-bold mb-4">🎉 Gratulujeme!</h2>
-          <p>Formulář byl úspěšně odeslán. Ozveme se Vám do 24 hodin s přesným oceněním.</p>
+        <div class="text-center">
+          <h2 class="text-2xl font-bold mb-4 text-green-400">Gratulujeme!</h2>
+          <p class="text-lg">Vaše údaje byly odeslány. Ozveme se vám do 24 hodin s oceněním.</p>
         </div>
       `;
+      confetti();
+    }
 
-      const audio = new Audio('https://freesound.org/data/previews/331/331912_3248244-lq.mp3');
-      audio.play();
-
-      setTimeout(() => fireworks.stop(), 6000);
+    window.onload = () => {
+      document.getElementById('form-content').innerHTML = `
+        <p class="font-semibold mb-4">${introStep.title}</p>
+        <div class="grid grid-cols-2 gap-4">
+          ${introStep.options.map(type => `<button onclick="startForm('${type}')" class="bg-gray-800 p-3 rounded hover:bg-green-600">${type}</button>`).join('')}
+        </div>
+      `;
     }
 
     function startForm(type) {
       selectedType = type;
+      currentStep = 0;
       if (type === 'Byt') steps = stepsByt;
       else if (type === 'Rodinný dům') steps = stepsDum;
       else if (type === 'Pozemek') steps = stepsPozemek;
       else if (type === 'Komerční nemovitost') steps = stepsKomerce;
-      renderStep(0);
+      renderStep(currentStep);
     }
   </script>
 </body>
