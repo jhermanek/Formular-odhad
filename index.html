@@ -7,28 +7,32 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
     .hidden { display: none; }
-    .progress-bar { height: 8px; background-color: #d1fae5; border-radius: 9999px; }
-    .progress-fill { height: 100%; background-color: #059669; border-radius: 9999px; }
+    .progress-bar { height: 8px; background-color: #d1d5db; border-radius: 9999px; }
+    .progress-fill { height: 100%; background-color: #10b981; border-radius: 9999px; }
     .card-selected { border: 2px solid #10b981; }
   </style>
 </head>
 <body class="bg-green-100 text-gray-900">
-  <div class="max-w-2xl mx-auto px-4 py-6">
-    <h1 class="text-2xl font-bold text-center text-green-800 mb-6">Zjistěte za kolik se dá prodat Vaše nemovitost</h1>
+  <div class="max-w-2xl mx-auto py-10 px-4">
+    <h1 class="text-3xl font-bold text-center text-green-900 mb-6">Zjistěte za kolik se dá prodat Vaše nemovitost</h1>
+
     <div class="bg-white p-6 rounded shadow">
-      <div class="flex justify-between text-sm mb-4">
-        <span id="progress-text">Krok 1 z 7</span>
-        <span id="progress-percentage">14%</span>
+      <div class="mb-4">
+        <div class="flex justify-between text-sm mb-1">
+          <span id="progress-text">Krok 1 z 7</span>
+          <span id="progress-percentage">14%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill" style="width: 14%"></div>
+        </div>
       </div>
-      <div class="progress-bar">
-        <div class="progress-fill" id="progress-fill" style="width: 14%;"></div>
-      </div>
+
+      <div id="form-content"></div>
     </div>
-    <div id="form-content"></div>
   </div>
 
   <script>
-    let selectedType = "";
+    let selectedType = '';
     let currentStep = 0;
     let steps = [];
 
@@ -40,7 +44,7 @@
       },
       {
         title: 'V jakém stavu je Vaše nemovitost?',
-        options: ['Po rekonstrukci', 'Dobrý stav', 'K rekonstrukci'],
+        options: ['Novostavba', 'Po rekonstrukci', 'Dobrý stav', 'K rekonstrukci'],
         progress: 71
       },
       {
@@ -57,19 +61,19 @@
 
     const introStep = {
       title: 'Jaký typ nemovitosti chcete ocenit?',
-      options: ['Byt', 'Rodinný dům', 'Pozemek', 'Komerční nemovitost'],
+      options: ['Byt', 'Rodinný dům', 'Pozemek'],
       progress: 14
     };
 
     const stepsByt = [
       {
         title: 'Jaká je dispozice Vašeho bytu?',
-        options: ['1kk', '1+1', '2kk', '2+1', '3kk', '3+1', '4kk a větší', 'Atypický'],
+        options: ['1+kk', '1+1', '2+kk', '2+1', '3+kk', '3+1', '4+kk a větší', 'Atypický'],
         progress: 29
       },
       {
         title: 'Jaká je přibližná velikost Vaší nemovitosti?',
-        options: ['Do 50 m²', '50 – 100 m²', '100 – 200 m²', 'Nad 200 m²'],
+        options: ['Do 50 m²', '50 - 100 m²', '100 - 200 m²', 'Nad 200 m²'],
         progress: 43
       },
       ...commonSteps
@@ -83,7 +87,7 @@
       },
       {
         title: 'Jaká je přibližná velikost Vaší nemovitosti?',
-        options: ['Do 50 m²', '50 – 100 m²', '100 – 200 m²', 'Nad 200 m²'],
+        options: ['Do 50 m²', '50 - 100 m²', '100 - 200 m²', 'Nad 200 m²'],
         progress: 43
       },
       ...commonSteps
@@ -97,12 +101,12 @@
       },
       {
         title: 'Jaká je přibližná velikost pozemku?',
-        options: ['Do 500 m²', '500 – 1000 m²', '1000 – 3000 m²', 'Nad 3000 m²'],
+        options: ['Do 500 m²', '500 - 1000 m²', '1000 - 3000 m²', 'Nad 3000 m²'],
         progress: 43
       },
       {
         title: 'Jaké jsou dostupné sítě?',
-        options: ['Všechny sítě', 'Elektřina a voda', 'Pouze elektřina', 'Žádné sítě'],
+        options: ['Všechny sítě', 'Elektřina + voda', 'Pouze elektřina', 'Žádné sítě'],
         progress: 57
       },
       {
@@ -112,24 +116,14 @@
       },
       {
         title: 'Uveďte katastrální území a číslo parcely',
-        customform: true,
+        customForm: true,
         progress: 86
       },
-      ...commonSteps
-    ];
-
-    const stepsKomerce = [
       {
-        title: 'O jaký typ komerční nemovitosti se jedná?',
-        options: ['Kancelář', 'Obchod', 'Restaurace', 'Sklad', 'Výrobní prostory', 'Jiné'],
-        progress: 29
-      },
-      {
-        title: 'Jaká je přibližná velikost nemovitosti?',
-        options: ['Do 50 m²', '50 – 200 m²', '200 – 500 m²', 'Nad 500 m²'],
-        progress: 43
-      },
-      ...commonSteps
+        title: 'Zadejte své kontaktní údaje',
+        form: true,
+        progress: 100
+      }
     ];
 
     function renderStep(stepIndex) {
@@ -143,15 +137,16 @@
         container.innerHTML = `
           <p class="font-semibold mb-4">${step.title}</p>
           <input type="text" placeholder="Jméno a příjmení" class="w-full mb-3 p-2 border rounded">
-          <input type="email" placeholder="Email" class="w-full mb-3 p-2 border rounded">
+          <input type="email" placeholder="E-mail" class="w-full mb-3 p-2 border rounded">
           <input type="tel" placeholder="Telefon" class="w-full mb-3 p-2 border rounded">
-          <textarea placeholder="Popis lokality (např. lokalita, ulice, město, PSČ)" class="w-full mb-3 p-2 border rounded"></textarea>
-          <label class="block mb-3">
-            <input type="checkbox"> Souhlasím se zpracováním osobních údajů
+          <input type="text" placeholder="Upřesnění lokality (ulice, město, PSČ)" class="w-full mb-3 p-2 border rounded">
+          <textarea placeholder="Popis lokality (např. blízkost školy, MHD, park...)" class="w-full mb-3 p-2 border rounded"></textarea>
+          <label class="block mb-1">
+            <input type="checkbox" class="mr-2"> Souhlasím se zpracováním osobních údajů
           </label>
           <button class="mt-4 bg-green-600 text-white px-4 py-2 rounded">Odeslat</button>
         `;
-      } else if (step.customform) {
+      } else if (step.customForm) {
         container.innerHTML = `
           <p class="font-semibold mb-4">${step.title}</p>
           <input type="text" placeholder="Katastrální území" class="w-full mb-3 p-2 border rounded">
@@ -159,27 +154,38 @@
           <button onclick="handleStep(${stepIndex + 1})" class="bg-green-600 text-white px-4 py-2 rounded">Pokračovat</button>
         `;
       } else {
-        container.innerHTML = `<p class="font-semibold mb-4">${step.title}</p>`;
-        step.options.forEach(option => {
-          const btn = document.createElement('button');
-          btn.textContent = option;
-          btn.className = 'block w-full mb-2 p-3 border rounded hover:bg-green-100';
-          btn.onclick = () => handleStep(stepIndex + 1);
-          container.appendChild(btn);
-        });
+        container.innerHTML = `
+          <p class="font-semibold mb-4">${step.title}</p>
+          <div class="grid grid-cols-2 gap-4">
+            ${step.options.map(option => `
+              <button onclick="handleStep(${stepIndex + 1})" class="border p-3 rounded hover:bg-green-100">${option}</button>
+            `).join('')}
+          </div>
+        `;
       }
     }
 
     function handleStep(nextIndex) {
       if (nextIndex < steps.length) {
         renderStep(nextIndex);
-        currentStep = nextIndex;
       }
     }
 
     window.onload = () => {
-      renderStep(0);
-    };
+      const container = document.getElementById('form-content');
+      document.getElementById('progress-text').textContent = `Krok 1 z 7`;
+      document.getElementById('progress-percentage').textContent = `${introStep.progress}%`;
+      document.getElementById('progress-fill').style.width = `${introStep.progress}%`;
+
+      container.innerHTML = `
+        <p class="font-semibold mb-4">${introStep.title}</p>
+        <div class="grid grid-cols-2 gap-4">
+          ${introStep.options.map(type => `
+            <button onclick="startForm('${type}')" class="border p-3 rounded hover:bg-green-100">${type}</button>
+          `).join('')}
+        </div>
+      `;
+    }
 
     function startForm(type) {
       selectedType = type;
@@ -187,21 +193,8 @@
       if (type === 'Byt') steps = stepsByt;
       else if (type === 'Rodinný dům') steps = stepsDum;
       else if (type === 'Pozemek') steps = stepsPozemek;
-      else if (type === 'Komerční nemovitost') steps = stepsKomerce;
       renderStep(currentStep);
     }
-
-    steps = [introStep];
   </script>
-
-  <div class="max-w-2xl mx-auto px-4 py-6">
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <button onclick="startForm('Byt')" class="border p-3 rounded hover:bg-green-100">Byt</button>
-      <button onclick="startForm('Rodinný dům')" class="border p-3 rounded hover:bg-green-100">Rodinný dům</button>
-      <button onclick="startForm('Pozemek')" class="border p-3 rounded hover:bg-green-100">Pozemek</button>
-      <button onclick="startForm('Komerční nemovitost')" class="border p-3 rounded hover:bg-green-100">Komerční nemovitost</button>
-    </div>
-  </div>
-
 </body>
 </html>
