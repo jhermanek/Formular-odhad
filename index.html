@@ -73,4 +73,89 @@
     }
   </script>
 </body>
+</html><!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ocenění bytu zdarma</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .hidden { display: none; }
+    .progress-bar { height: 8px; background-color: #d1d5db; border-radius: 9999px; }
+    .progress-fill { height: 100%; background-color: #10b981; border-radius: 9999px; }
+    .card-selected { border: 2px solid #10b981; }
+  </style>
+</head>
+<body class="bg-green-100 text-gray-900">
+  <div class="max-w-2xl mx-auto py-10 px-4">
+    <h1 class="text-3xl font-bold text-center text-green-900 mb-6">Zjistěte za kolik se dá prodat Vaše nemovitost</h1>
+
+    <div class="bg-white p-6 rounded shadow">
+      <div class="mb-4">
+        <div class="flex justify-between text-sm mb-1">
+          <span id="progress-text">Krok 1 z 7</span>
+          <span id="progress-percentage">14%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill" style="width: 14%"></div>
+        </div>
+      </div>
+
+      <!-- Krok 1 - Výběr typu nemovitosti -->
+      <div class="step" id="step-1">
+        <p class="font-semibold mb-4">Jaký typ nemovitosti chcete ocenit?</p>
+        <div class="grid grid-cols-2 gap-4">
+          <button onclick="selectType('byt')" id="btn-byt" class="border p-3 rounded hover:bg-green-100">Byt<br><span class="text-sm">Bytová jednotka v domě</span></button>
+          <button disabled class="border p-3 rounded bg-gray-100 opacity-50 cursor-not-allowed">Rodinný dům</button>
+          <button disabled class="border p-3 rounded bg-gray-100 opacity-50 cursor-not-allowed">Pozemek</button>
+          <button disabled class="border p-3 rounded bg-gray-100 opacity-50 cursor-not-allowed">Komerční nemovitost</button>
+        </div>
+        <button onclick="nextStep(1, 2, 29)" id="next-btn-1" class="mt-6 bg-green-600 text-white px-4 py-2 rounded hidden">Pokračovat</button>
+      </div>
+
+      <!-- Krok 2 - Dispozice bytu -->
+      <div class="step hidden" id="step-2">
+        <p class="font-semibold mb-4">Jaká je dispozice Vašeho bytu?</p>
+        <div class="grid grid-cols-2 gap-4">
+          <button onclick="nextStep(2, 3, 43)" class="border p-3 rounded hover:bg-green-100">1+kk<br><span class="text-sm">Jedna místnost s kuchyňským koutem</span></button>
+          <button onclick="nextStep(2, 3, 43)" class="border p-3 rounded hover:bg-green-100">1+1<br><span class="text-sm">Jedna místnost a samostatná kuchyň</span></button>
+          <button onclick="nextStep(2, 3, 43)" class="border p-3 rounded hover:bg-green-100">2+kk<br><span class="text-sm">Dvě místnosti s kuchyňským koutem</span></button>
+          <button onclick="nextStep(2, 3, 43)" class="border p-3 rounded hover:bg-green-100">2+1<br><span class="text-sm">Dvě místnosti a samostatná kuchyň</span></button>
+          <button onclick="nextStep(2, 3, 43)" class="border p-3 rounded hover:bg-green-100">3+kk<br><span class="text-sm">Tři místnosti s kuchyňským koutem</span></button>
+          <button onclick="nextStep(2, 3, 43)" class="border p-3 rounded hover:bg-green-100">3+1<br><span class="text-sm">Tři místnosti a samostatná kuchyň</span></button>
+          <button onclick="nextStep(2, 3, 43)" class="border p-3 rounded hover:bg-green-100">4+kk a větší<br><span class="text-sm">Čtyři a více místností</span></button>
+          <button onclick="nextStep(2, 3, 43)" class="border p-3 rounded hover:bg-green-100">Atypický<br><span class="text-sm">Nestandardní dispozice</span></button>
+        </div>
+      </div>
+
+      <!-- Krok 3 - Velikost nemovitosti -->
+      <div class="step hidden" id="step-3">
+        <p class="font-semibold mb-4">Jaká je přibližná velikost Vaší nemovitosti?</p>
+        <div class="grid grid-cols-2 gap-4">
+          <button onclick="nextStep(3, 4, 57)" class="border p-3 rounded hover:bg-green-100">Do 50 m²<br><span class="text-sm">Menší nemovitost</span></button>
+          <button onclick="nextStep(3, 4, 57)" class="border p-3 rounded hover:bg-green-100">50 - 100 m²<br><span class="text-sm">Středně velká nemovitost</span></button>
+          <button onclick="nextStep(3, 4, 57)" class="border p-3 rounded hover:bg-green-100">100 - 200 m²<br><span class="text-sm">Větší nemovitost</span></button>
+          <button onclick="nextStep(3, 4, 57)" class="border p-3 rounded hover:bg-green-100">Nad 200 m²<br><span class="text-sm">Velmi velká nemovitost</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function selectType(type) {
+      document.getElementById('btn-byt').classList.add('card-selected');
+      document.getElementById('next-btn-1').classList.remove('hidden');
+    }
+
+    function nextStep(current, next, progress) {
+      document.getElementById('step-' + current).classList.add('hidden');
+      document.getElementById('step-' + next).classList.remove('hidden');
+      document.getElementById('progress-text').textContent = `Krok ${next} z 7`;
+      document.getElementById('progress-percentage').textContent = `${progress}%`;
+      document.getElementById('progress-fill').style.width = `${progress}%`;
+    }
+  </script>
+</body>
 </html>
+
