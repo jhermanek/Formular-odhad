@@ -7,36 +7,43 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
     .hidden { display: none; }
-    .progress-bar { height: 8px; background-color: #2d3748; border-radius: 9999px; }
-    .progress-fill { height: 100%; background-color: #48bb78; border-radius: 9999px; transition: width 0.3s ease-in-out; }
-    .card-selected { border: 2px solid #48bb78; }
-    .fade-enter {
-      opacity: 0;
-      transform: translateY(20px);
+    .progress-bar { height: 8px; background-color: #d1d5db; border-radius: 9999px; position: relative; }
+    .progress-fill { height: 100%; background-color: #10b981; border-radius: 9999px; transition: width 0.5s ease; }
+    .progress-bubble {
+      position: absolute;
+      top: -20px;
+      width: 20px;
+      height: 20px;
+      background-color: #10b981;
+      border-radius: 9999px;
+      text-align: center;
+      font-size: 12px;
+      color: white;
     }
-    .fade-enter-active {
-      opacity: 1;
-      transform: translateY(0);
-      transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+    .card-selected { border: 2px solid #10b981; }
+    .fade-enter { opacity: 0; transform: translateY(10px); transition: all 0.3s ease; }
+    .fade-enter-active { opacity: 1; transform: translateY(0); }
+    .option-button {
+      @apply border p-3 rounded flex items-center justify-center gap-2 hover:bg-green-100 transition;
     }
   </style>
 </head>
-<body class="bg-gray-900 text-white">
+<body class="bg-green-100 text-gray-900">
   <div class="max-w-2xl mx-auto py-10 px-4">
-    <h1 class="text-3xl font-bold text-center text-green-400 mb-6">Zjistěte za kolik se dá prodat Vaše nemovitost</h1>
+    <h1 class="text-3xl font-bold text-center text-green-900 mb-6">Zjistěte za kolik se dá prodat Vaše nemovitost</h1>
 
-    <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-      <div class="mb-4">
+    <div class="bg-white p-6 rounded shadow">
+      <div class="mb-4 relative">
         <div class="flex justify-between text-sm mb-1">
-          <span id="progress-text">Krok 1 z 7</span>
-          <span id="progress-percentage">14%</span>
+          <span id="progress-text">Krok 1</span>
+          <span id="progress-percentage">0%</span>
         </div>
         <div class="progress-bar">
-          <div class="progress-fill" id="progress-fill" style="width: 14%"></div>
+          <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
         </div>
       </div>
 
-      <div id="form-content" class="transition-all"></div>
+      <div id="form-content"></div>
     </div>
   </div>
 
@@ -137,70 +144,58 @@
 
     const stepsKomerce = [
       {
-        title: 'Jaký typ komerční nemovitosti chcete ocenit?',
-        options: ['Kancelář', 'Obchodní prostor', 'Sklad', 'Výrobní hala', 'Areál', 'Hotel / penzion', 'Jiné'],
+        title: 'Jaký typ komerční nemovitosti?',
+        options: ['Kancelář', 'Obchod', 'Sklad', 'Výrobní hala', 'Ubytovna', 'Penzion', 'Jiné'],
         progress: 29
       },
       {
         title: 'Jaká je přibližná velikost nemovitosti?',
-        options: ['Do 100 m²', '100 - 500 m²', '500 - 1000 m²', 'Nad 1000 m²'],
+        options: ['Do 50 m²', '50 - 200 m²', '200 - 500 m²', 'Nad 500 m²'],
         progress: 43
       },
       ...commonSteps
     ];
 
-    function fadeTransition(callback) {
-      const container = document.getElementById('form-content');
-      container.classList.add('fade-enter');
-      setTimeout(() => {
-        callback();
-        container.classList.add('fade-enter-active');
-        setTimeout(() => {
-          container.classList.remove('fade-enter');
-          container.classList.remove('fade-enter-active');
-        }, 400);
-      }, 50);
-    }
-
     function renderStep(stepIndex) {
-      fadeTransition(() => {
-        const container = document.getElementById('form-content');
-        const step = steps[stepIndex];
-        document.getElementById('progress-text').textContent = `Krok ${stepIndex + 1} z ${steps.length}`;
-        document.getElementById('progress-percentage').textContent = `${step.progress}%`;
-        document.getElementById('progress-fill').style.width = `${step.progress}%`;
+      const container = document.getElementById('form-content');
+      const step = steps[stepIndex];
+      document.getElementById('progress-text').textContent = `Krok ${stepIndex + 1} z ${steps.length}`;
+      document.getElementById('progress-percentage').textContent = `${step.progress}%`;
+      document.getElementById('progress-fill').style.width = `${step.progress}%`;
 
-        if (step.form) {
-          container.innerHTML = `
-            <p class="font-semibold mb-4">${step.title}</p>
-            <input type="text" placeholder="Jméno a příjmení" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-            <input type="email" placeholder="E-mail" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-            <input type="tel" placeholder="Telefon" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-            <input type="text" placeholder="Upřesnění lokality (ulice, město, PSČ)" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-            <textarea placeholder="Popis lokality (např. blízkost školy, MHD, park...)" class="w-full mb-3 p-2 rounded bg-gray-700 text-white"></textarea>
-            <label class="block mb-1">
-              <input type="checkbox" class="mr-2"> Souhlasím se zpracováním osobních údajů
-            </label>
-            <button class="mt-4 bg-green-600 text-white px-4 py-2 rounded">Odeslat</button>
-          `;
-        } else if (step.customForm) {
-          container.innerHTML = `
-            <p class="font-semibold mb-4">${step.title}</p>
-            <input type="text" placeholder="Katastrální území" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-            <input type="text" placeholder="Číslo parcely" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-            <button onclick="handleStep(${stepIndex + 1})" class="bg-green-600 text-white px-4 py-2 rounded">Pokračovat</button>
-          `;
-        } else {
-          container.innerHTML = `
-            <p class="font-semibold mb-4">${step.title}</p>
-            <div class="grid grid-cols-2 gap-4">
-              ${step.options.map(option => `
-                <button onclick="handleStep(${stepIndex + 1})" class="border border-gray-600 p-3 rounded hover:bg-green-600 hover:text-white">${option}</button>
-              `).join('')}
-            </div>
-          `;
-        }
-      });
+      container.classList.add('fade-enter');
+      setTimeout(() => container.classList.remove('fade-enter'), 10);
+
+      if (step.form) {
+        container.innerHTML = `
+          <p class="font-semibold mb-4">${step.title}</p>
+          <input type="text" placeholder="Jméno a příjmení" class="w-full mb-3 p-2 border rounded">
+          <input type="email" placeholder="E-mail" class="w-full mb-3 p-2 border rounded">
+          <input type="tel" placeholder="Telefon" class="w-full mb-3 p-2 border rounded">
+          <input type="text" placeholder="Upřesnění lokality (ulice, město, PSČ)" class="w-full mb-3 p-2 border rounded">
+          <textarea placeholder="Popis lokality (např. blízkost školy, MHD, park...)" class="w-full mb-3 p-2 border rounded"></textarea>
+          <label class="block mb-1">
+            <input type="checkbox" class="mr-2"> Souhlasím se zpracováním osobních údajů
+          </label>
+          <button class="mt-4 bg-green-600 text-white px-4 py-2 rounded">Odeslat</button>
+        `;
+      } else if (step.customForm) {
+        container.innerHTML = `
+          <p class="font-semibold mb-4">${step.title}</p>
+          <input type="text" placeholder="Katastrální území" class="w-full mb-3 p-2 border rounded">
+          <input type="text" placeholder="Číslo parcely" class="w-full mb-3 p-2 border rounded">
+          <button onclick="handleStep(${stepIndex + 1})" class="bg-green-600 text-white px-4 py-2 rounded">Pokračovat</button>
+        `;
+      } else {
+        container.innerHTML = `
+          <p class="font-semibold mb-4">${step.title}</p>
+          <div class="grid grid-cols-2 gap-4">
+            ${step.options.map(option => `
+              <button onclick="handleStep(${stepIndex + 1})" class="option-button">${option}</button>
+            `).join('')}
+          </div>
+        `;
+      }
     }
 
     function handleStep(nextIndex) {
@@ -211,7 +206,7 @@
 
     window.onload = () => {
       const container = document.getElementById('form-content');
-      document.getElementById('progress-text').textContent = `Krok 1 z 7`;
+      document.getElementById('progress-text').textContent = `Krok 1`;
       document.getElementById('progress-percentage').textContent = `${introStep.progress}%`;
       document.getElementById('progress-fill').style.width = `${introStep.progress}%`;
 
@@ -219,7 +214,7 @@
         <p class="font-semibold mb-4">${introStep.title}</p>
         <div class="grid grid-cols-2 gap-4">
           ${introStep.options.map(type => `
-            <button onclick="startForm('${type}')" class="border p-3 rounded hover:bg-green-600 hover:text-white">${type}</button>
+            <button onclick="startForm('${type}')" class="option-button">${type}</button>
           `).join('')}
         </div>
       `;
