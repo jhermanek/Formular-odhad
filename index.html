@@ -55,7 +55,7 @@
       <p class="mb-4 font-semibold text-lg">Jaký typ nemovitosti chcete ocenit?</p>
       <div class="grid grid-cols-2 gap-4">
         <button onclick="setValueAndNext('typ', 'byt', 'step2_byt', 'step1')" class="border p-4 rounded-lg hover:bg-green-100">Byt<br><small>Bytová jednotka v domě</small></button>
-        <button onclick="setValueAndNext('typ', 'dum', 'step2_dum', 'step1')" class="border p-4 rounded-lg hover:bg-green-100">Rodinný dům<br><small>Samostatný nebo řadový dům</small></button>
+        <button onclick="setValueAndNext('typ', 'dum', 'step2_dum1', 'step1')" class="border p-4 rounded-lg hover:bg-green-100">Rodinný dům<br><small>Samostatný nebo řadový dům</small></button>
         <button onclick="setValueAndNext('typ', 'pozemek', 'step2_pozemek', 'step1')" class="border p-4 rounded-lg hover:bg-green-100">Pozemek<br><small>Stavební parcela nebo zahrada</small></button>
         <button onclick="setValueAndNext('typ', 'komercni', 'step2_komercni', 'step1')" class="border p-4 rounded-lg hover:bg-green-100">Komerční nemovitost<br><small>Kancelář, obchod nebo jiný prostor</small></button>
       </div>
@@ -90,14 +90,42 @@
       </div>
     </div>
 
-    <!-- Krok 2b: Dům -->
-    <div id="step2_dum" class="step hidden"></div>
+    <!-- Krok 2b: Dům (vícekrokový) -->
+    <div id="step2_dum1" class="step hidden">
+      <p class="mb-4 font-semibold">V jakém je dům stavu?</p>
+      <select class="w-full mb-4 p-2 border rounded">
+        <option>Novostavba</option>
+        <option>Po rekonstrukci</option>
+        <option>Původní stav</option>
+        <option>Nutná rekonstrukce</option>
+      </select>
+      <div class="flex justify-between">
+        <button onclick="goBack()" class="bg-gray-300 text-black px-4 py-2 rounded">Zpět</button>
+        <button onclick="setValueAndNext('stav_dum', 'vybrano', 'step2_dum2', 'step2_dum1')" class="bg-green-600 text-white px-4 py-2 rounded">Pokračovat</button>
+      </div>
+    </div>
+    <div id="step2_dum2" class="step hidden">
+      <p class="mb-4 font-semibold">Jsou k domu zavedeny sítě?</p>
+      <div class="mb-4">
+        <label class="block"><input type="checkbox"> Elektrika</label>
+        <label class="block"><input type="checkbox"> Voda</label>
+        <label class="block"><input type="checkbox"> Kanalizace</label>
+        <label class="block"><input type="checkbox"> Plyn</label>
+      </div>
+      <div class="flex justify-between">
+        <button onclick="goBack()" class="bg-gray-300 text-black px-4 py-2 rounded">Zpět</button>
+        <button onclick="showStep('step_final')" class="bg-green-600 text-white px-4 py-2 rounded">Pokračovat</button>
+      </div>
+    </div>
+
     <!-- Krok 2c: Pozemek -->
     <div id="step2_pozemek" class="step hidden"></div>
     <!-- Krok 2d: Komerční -->
     <div id="step2_komercni" class="step hidden"></div>
     <!-- Finální krok -->
-    <div id="step_final" class="step hidden"></div>
+    <div id="step_final" class="step hidden">
+      <p class="mb-4 font-semibold">Děkujeme za vyplnění údajů. Brzy se vám ozveme s odhadem ceny.</p>
+    </div>
 
   </div>
 </body>
