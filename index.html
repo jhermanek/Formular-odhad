@@ -8,29 +8,51 @@
     <script>
         function showStep(stepId) {
             document.querySelectorAll('.step').forEach(el => el.classList.add('hidden'));
-            document.getElementById(stepId).classList.remove('hidden');
+            const step = document.getElementById(stepId);
+            step.classList.remove('hidden');
+            step.classList.add('animate-fadeIn');
         }
-        function setValueAndNext(inputName, value, nextStep) {
+        function setValueAndNext(inputName, value, nextStep, currentStep) {
             document.querySelector(`input[name="${inputName}"]`).value = value;
+            historyStack.push(currentStep);
             showStep(nextStep);
         }
+        function goBack() {
+            if (historyStack.length > 0) {
+                const previousStep = historyStack.pop();
+                showStep(previousStep);
+            }
+        }
+        const historyStack = [];
     </script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 py-10">
-  <div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
-    <h1 class="text-2xl font-bold mb-4 text-center">Odhad ceny nemovitosti</h1>
+<body class="bg-black py-10 text-green-400">
+  <div class="max-w-xl mx-auto bg-gray-900 p-6 rounded-xl shadow-lg">
+    <h1 class="text-3xl font-bold mb-2 text-center text-green-400">Odhad ceny nemovitosti</h1>
+    <p class="text-center mb-6 text-green-300">Získejte orientační odhad nemovitosti <strong>zdarma do 24 hodin</strong></p>
 
     <!-- Krok 1: Typ nemovitosti -->
-    <div id="step1" class="step">
+    <div id="step1" class="step animate-fadeIn">
       <p class="mb-4 font-semibold">Jaký typ nemovitosti chcete ocenit?</p>
       <div class="grid grid-cols-2 gap-4">
-        <button onclick="setValueAndNext('typ', 'byt', 'step2_byt')" class="bg-blue-100 hover:bg-blue-200 p-3 rounded">Byt</button>
-        <button onclick="setValueAndNext('typ', 'dum', 'step2_dum')" class="bg-blue-100 hover:bg-blue-200 p-3 rounded">Rodinný dům</button>
-        <button onclick="setValueAndNext('typ', 'pozemek', 'step2_pozemek')" class="bg-blue-100 hover:bg-blue-200 p-3 rounded">Pozemek</button>
-        <button onclick="setValueAndNext('typ', 'komercni', 'step2_komercni')" class="bg-blue-100 hover:bg-blue-200 p-3 rounded">Komerční</button>
+        <button onclick="setValueAndNext('typ', 'byt', 'step2_byt', 'step1')" class="bg-green-800 hover:bg-green-700 p-3 rounded-lg text-white">Byt</button>
+        <button onclick="setValueAndNext('typ', 'dum', 'step2_dum', 'step1')" class="bg-green-800 hover:bg-green-700 p-3 rounded-lg text-white">Rodinný dům</button>
+        <button onclick="setValueAndNext('typ', 'pozemek', 'step2_pozemek', 'step1')" class="bg-green-800 hover:bg-green-700 p-3 rounded-lg text-white">Pozemek</button>
+        <button onclick="setValueAndNext('typ', 'komercni', 'step2_komercni', 'step1')" class="bg-green-800 hover:bg-green-700 p-3 rounded-lg text-white">Komerční</button>
       </div>
       <input type="hidden" name="typ" />
     </div>
+
+    <!-- Ostatní kroky beze změny stylu – lze dále upravit dle potřeby -->
 
     <!-- Krok 2a: Byt -->
     <div id="step2_byt" class="step hidden">
@@ -54,102 +76,12 @@
         <option>Osobní vlastnictví</option>
         <option>Družstevní</option>
       </select>
-      <button onclick="showStep('step_final')" class="bg-green-500 text-white px-4 py-2 rounded">Pokračovat</button>
-    </div>
-
-    <!-- Krok 2b: Dům -->
-    <div id="step2_dum" class="step hidden">
-      <input type="text" class="w-full mb-4 p-2 border rounded" placeholder="Stav nemovitosti">
-      <input type="text" class="w-full mb-4 p-2 border rounded" placeholder="Připojené sítě (el., voda, plyn, kanalizace)">
-      <input type="text" class="w-full mb-4 p-2 border rounded" placeholder="Lokalita">
-      <input type="text" class="w-full mb-4 p-2 border rounded" placeholder="Zastavěná plocha m²">
-      <input type="text" class="w-full mb-4 p-2 border rounded" placeholder="Plocha pozemku m²">
-      <input type="text" class="w-full mb-4 p-2 border rounded" placeholder="Typ konstrukce">
-      <button onclick="showStep('step_final')" class="bg-green-500 text-white px-4 py-2 rounded">Pokračovat</button>
-    </div>
-
-    <!-- Krok 2c: Pozemek -->
-    <div id="step2_pozemek" class="step hidden">
-      <input type="text" class="w-full mb-4 p-2 border rounded" placeholder="Druh pozemku">
-      <input type="text" class="w-full mb-4 p-2 border rounded" placeholder="Velikost (m²)">
-      <input type="text" class="w-full mb-4 p-2 border rounded" placeholder="Sítě na pozemku">
-      <input type="text" class="w-full mb-4 p-2 border rounded" placeholder="Připojení na vodovod">
-      <input type="text" class="w-full mb-4 p-2 border rounded" placeholder="Číslo parcely / LV">
-      <input type="text" class="w-full mb-4 p-2 border rounded" placeholder="Lokalita">
-      <button onclick="showStep('step_final')" class="bg-green-500 text-white px-4 py-2 rounded">Pokračovat</button>
-    </div>
-
-    <!-- Krok 2d: Komerční -->
-    <div id="step2_komercni" class="step hidden">
-      <input type="text" class="w-full mb-4 p-2 border rounded" placeholder="Typ komerční nemovitosti">
-      <input type="text" class="w-full mb-4 p-2 border rounded" placeholder="Velikost (m²)">
-      <input type="text" class="w-full mb-4 p-2 border rounded" placeholder="Počet pater / jednotek">
-      <input type="text" class="w-full mb-4 p-2 border rounded" placeholder="Stav objektu">
-      <input type="text" class="w-full mb-4 p-2 border rounded" placeholder="Využití / nájemní vztahy">
-      <input type="text" class="w-full mb-4 p-2 border rounded" placeholder="Lokalita">
-      <button onclick="showStep('step_final')" class="bg-green-500 text-white px-4 py-2 rounded">Pokračovat</button>
-    </div>
-
-    <!-- Finální krok -->
-    <div id="step_final" class="step hidden">
-      <h2 class="text-xl font-semibold mb-4">Zadejte kontaktní údaje</h2>
-      <input type="text" class="w-full mb-4 p-2 border rounded" placeholder="Jméno">
-      <input type="email" class="w-full mb-4 p-2 border rounded" placeholder="E-mail">
-      <input type="tel" class="w-full mb-4 p-2 border rounded" placeholder="Telefon">
-      <button class="bg-blue-600 text-white px-4 py-2 rounded">Odeslat</button>
-    </div>
-  </div>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="cs">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ocenění nemovitosti</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script>
-        function showStep(stepId) {
-            document.querySelectorAll('.step').forEach(el => el.classList.add('hidden'));
-            const step = document.getElementById(stepId);
-            step.classList.remove('hidden');
-            step.classList.add('animate-fadeIn');
-        }
-        function setValueAndNext(inputName, value, nextStep) {
-            document.querySelector(`input[name="${inputName}"]`).value = value;
-            showStep(nextStep);
-        }
-    </script>
-    <style>
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fadeIn {
-            animation: fadeIn 0.5s ease-out;
-        }
-    </style>
-</head>
-<body class="bg-black py-10 text-green-400">
-  <div class="max-w-xl mx-auto bg-gray-900 p-6 rounded-xl shadow-lg">
-    <h1 class="text-3xl font-bold mb-6 text-center text-green-400">Odhad ceny nemovitosti</h1>
-
-    <!-- Krok 1: Typ nemovitosti -->
-    <div id="step1" class="step animate-fadeIn">
-      <p class="mb-4 font-semibold">Jaký typ nemovitosti chcete ocenit?</p>
-      <div class="grid grid-cols-2 gap-4">
-        <button onclick="setValueAndNext('typ', 'byt', 'step2_byt')" class="bg-green-800 hover:bg-green-700 p-3 rounded-lg text-white">Byt</button>
-        <button onclick="setValueAndNext('typ', 'dum', 'step2_dum')" class="bg-green-800 hover:bg-green-700 p-3 rounded-lg text-white">Rodinný dům</button>
-        <button onclick="setValueAndNext('typ', 'pozemek', 'step2_pozemek')" class="bg-green-800 hover:bg-green-700 p-3 rounded-lg text-white">Pozemek</button>
-        <button onclick="setValueAndNext('typ', 'komercni', 'step2_komercni')" class="bg-green-800 hover:bg-green-700 p-3 rounded-lg text-white">Komerční</button>
+      <div class="flex justify-between">
+        <button onclick="goBack()" class="bg-gray-700 text-white px-4 py-2 rounded">Zpět</button>
+        <button onclick="showStep('step_final')" class="bg-green-600 text-white px-4 py-2 rounded">Pokračovat</button>
       </div>
-      <input type="hidden" name="typ" />
     </div>
 
-    <!-- Ostatní kroky beze změny stylu – lze dále upravit dle potřeby -->
-
-    <!-- Krok 2a: Byt -->
-    <div id="step2_byt" class="step hidden"></div>
     <!-- Krok 2b: Dům -->
     <div id="step2_dum" class="step hidden"></div>
     <!-- Krok 2c: Pozemek -->
