@@ -61,7 +61,7 @@
 
     const introStep = {
       title: 'Jaký typ nemovitosti chcete ocenit?',
-      options: ['Byt', 'Rodinný dům', 'Pozemek'],
+      options: ['Byt', 'Rodinný dům', 'Pozemek', 'Komerční nemovitost'],
       progress: 14
     };
 
@@ -124,6 +124,20 @@
         form: true,
         progress: 100
       }
+    ];
+
+    const stepsKomerce = [
+      {
+        title: 'Jaký typ komerční nemovitosti chcete ocenit?',
+        options: ['Kancelář', 'Obchodní prostor', 'Sklad', 'Výrobní hala', 'Garáže', 'Ubytovna', 'Smíšené využití'],
+        progress: 29
+      },
+      {
+        title: 'Jaká je přibližná velikost Vaší nemovitosti?',
+        options: ['Do 50 m²', '50 - 100 m²', '100 - 200 m²', '200 - 500 m²', 'Nad 500 m²'],
+        progress: 43
+      },
+      ...commonSteps
     ];
 
     function renderStep(stepIndex) {
@@ -193,6 +207,7 @@
       if (type === 'Byt') steps = stepsByt;
       else if (type === 'Rodinný dům') steps = stepsDum;
       else if (type === 'Pozemek') steps = stepsPozemek;
+      else if (type === 'Komerční nemovitost') steps = stepsKomerce;
       renderStep(currentStep);
     }
   </script>
