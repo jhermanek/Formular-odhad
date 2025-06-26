@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Odhad nemovitosti</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 0; margin: 0; background: #f9f9f9; }
+    header { background: #282c34; color: white; padding: 30px; text-align: center; }
+    form { max-width: 500px; margin: 30px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    input, select, button { width: 100%; padding: 12px; margin: 8px 0; font-size: 16px; }
+    button { background: #28a745; color: white; border: none; cursor: pointer; }
+    button:hover { background: #218838; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Získejte odhad nemovitosti</h1>
+    <p>Vyplňte formulář a já se vám ozvu</p>
+  </header>
+
+  <form id="form">
+    <input type="text" name="jmeno" placeholder="Jméno a příjmení" required />
+    <input type="email" name="email" placeholder="E-mail" required />
+    <input type="tel" name="telefon" placeholder="Telefon" required />
+    <select name="typ" required>
+      <option value="">Vyberte typ nemovitosti</option>
+      <option value="byt">Byt</option>
+      <option value="dum">Dům</option>
+      <option value="pozemek">Pozemek</option>
+    </select>
+    <input type="text" name="lokalita" placeholder="Lokalita (město, obec)" required />
+    <input type="number" name="velikost" placeholder="Velikost v m²" required />
+    <button type="submit">Odeslat</button>
+  </form>
+
+  <script>
+    document.getElementById("form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      alert("Formulář odeslán! (zatím testovací verze)");
+    });
+  </script>
+</body>
+</html>
