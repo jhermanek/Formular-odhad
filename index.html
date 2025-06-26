@@ -90,116 +90,8 @@
       ...commonSteps
     ];
 
-    function fadeTransition(callback) {
-      const container = document.getElementById('form-content');
-      container.classList.add('fade-enter');
-      setTimeout(() => {
-        callback();
-        container.classList.add('fade-enter-active');
-        setTimeout(() => {
-          container.classList.remove('fade-enter');
-          container.classList.remove('fade-enter-active');
-        }, 400);
-      }, 50);
-    }
-
-    function renderStep(stepIndex) {
-      fadeTransition(() => {
-        const container = document.getElementById('form-content');
-        const step = steps[stepIndex];
-        document.getElementById('progress-text').textContent = `Krok ${stepIndex + 1} z ${steps.length}`;
-        document.getElementById('progress-percentage').textContent = `${step.progress}%`;
-        document.getElementById('progress-fill').style.width = `${step.progress}%`;
-        document.getElementById('back-button').classList.toggle('hidden', stepIndex === 0);
-
-        if (step.form) {
-          container.innerHTML = `
-            <p class="font-semibold mb-4">${step.title}</p>
-            <input type="text" placeholder="Jméno a příjmení" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-            <input type="email" placeholder="E-mail" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-            <input type="tel" placeholder="Telefon" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-            <input type="text" placeholder="Upřesnění lokality (ulice, město, PSČ)" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-            <textarea placeholder="Popis lokality (např. blízkost školy, MHD, park...)" class="w-full mb-3 p-2 rounded bg-gray-700 text-white"></textarea>
-            <label class="block mb-1">
-              <input type="checkbox" class="mr-2"> Souhlasím se zpracováním osobních údajů
-            </label>
-            <button onclick="odeslatFormular()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded">Odeslat</button>
-          `;
-        } else if (step.customForm) {
-          container.innerHTML = `
-            <p class="font-semibold mb-4">${step.title}</p>
-            <input type="text" placeholder="Katastrální území" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-            <input type="text" placeholder="Číslo parcely" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-            <button onclick="handleStep(${stepIndex + 1})" class="bg-green-600 text-white px-4 py-2 rounded">Pokračovat</button>
-          `;
-        } else {
-          container.innerHTML = `
-            <p class="font-semibold mb-4">${step.title}</p>
-            <div class="grid grid-cols-2 gap-4">
-              ${step.options.map(option => `
-                <button onclick="handleStep(${stepIndex + 1})" class="border border-gray-600 p-3 rounded hover:bg-green-600 hover:text-white">${option}</button>
-              `).join('')}
-            </div>
-          `;
-        }
-      });
-    }
-
-    function handleStep(nextIndex) {
-      currentStep = nextIndex;
-      if (nextIndex < steps.length) renderStep(nextIndex);
-    }
-
-    function goBack() {
-      if (currentStep > 0) {
-        currentStep--;
-        renderStep(currentStep);
-      }
-    }
-
-    function startIntro() {
-      document.getElementById('intro-screen').classList.add('hidden');
-      document.getElementById('main-form').classList.remove('hidden');
-      steps = [];
-      selectedType = '';
-      currentStep = 0;
-      const container = document.getElementById('form-content');
-      container.innerHTML = `
-        <p class="font-semibold mb-4">${introStep.title}</p>
-        <div class="grid grid-cols-2 gap-4">
-          ${introStep.options.map(type => `
-            <button onclick="startForm('${type}')" class="border p-3 rounded hover:bg-green-600 hover:text-white">${type}</button>
-          `).join('')}
-        </div>
-      `;
-    }
-
-    function startForm(type) {
-      selectedType = type;
-      currentStep = 0;
-      if (type === 'Byt') steps = stepsByt;
-      else if (type === 'Rodinný dům') steps = stepsDum;
-      else if (type === 'Pozemek') steps = stepsPozemek;
-      else if (type === 'Komerční nemovitost') steps = stepsKomerce;
-      renderStep(currentStep);
-    }
-
-    function showCelebration() {
-      const canvas = document.getElementById('confetti-canvas');
-      const audio = document.getElementById('confetti-sound');
-      canvas.classList.remove('hidden');
-      audio.play();
-      const myConfetti = confetti.create(canvas, { resize: true });
-      myConfetti({ particleCount: 300, spread: 120 });
-      setTimeout(() => {
-        alert('Děkujeme! Ozveme se Vám do 24 hodin s oceněním.');
-        location.reload();
-      }, 3000);
-    }
-
     async function odeslatDoSheetu(data) {
-     const url = "https://script.google.com/macros/s/AKfycbzOLm8VCI9X2aeuo9tZsf6IhmJ8iw-sQLjV1yaQYVnr799up_Ej8bXeo0QmPVjhG6N1-w/exec";
-
+      const url = "https://script.google.com/macros/s/AKfycbzOLm8VCI9X2aeuo9tZsf6IhmJ8iw-sQLjV1yaQYVnr799up_Ej8bXeo0QmPVjhG6N1-w/exec";
       try {
         const response = await fetch(url, {
           method: "POST",
@@ -216,4 +108,28 @@
     function odeslatFormular() {
       const jmeno = document.querySelector('input[placeholder="Jméno a příjmení"]').value;
       const email = document.querySelector('input[placeholder="E-mail"]').value;
-      const telefon = document.querySelector('input[placeholder="Telefon"]').
+      const telefon = document.querySelector('input[placeholder="Telefon"]').value;
+      const lokalita = document.querySelector('input[placeholder*="ulice"]').value;
+      const popis = document.querySelector('textarea[placeholder*="blízkost"]').value;
+      const souhlas = document.querySelector('input[type="checkbox"]').checked;
+
+      if (!jmeno || !email || !telefon || !lokalita || !popis || !souhlas) {
+        alert("Vyplňte prosím všechna pole a potvrďte souhlas se zpracováním údajů.");
+        return;
+      }
+
+      const data = {
+        jmeno,
+        email,
+        telefon,
+        lokalita,
+        popis,
+        typ: selectedType
+      };
+
+      odeslatDoSheetu(data);
+      showCelebration();
+    }
+  </script>
+</body>
+</html>
