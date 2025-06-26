@@ -13,7 +13,16 @@
             step.classList.add('animate-fadeIn');
         }
         function setValueAndNext(inputName, value, nextStep, currentStep) {
-            document.querySelector(`input[name="${inputName}"]`).value = value;
+            const hiddenInput = document.querySelector(`input[name="${inputName}"]`);
+            if (hiddenInput) {
+                hiddenInput.value = value;
+            } else {
+                const newInput = document.createElement('input');
+                newInput.type = 'hidden';
+                newInput.name = inputName;
+                newInput.value = value;
+                document.forms[0].appendChild(newInput);
+            }
             historyStack.push(currentStep);
             showStep(nextStep);
         }
@@ -54,77 +63,100 @@
     <div id="step1" class="step animate-fadeIn">
       <p class="mb-4 font-semibold text-lg">Jaký typ nemovitosti chcete ocenit?</p>
       <div class="grid grid-cols-2 gap-4">
-        <button onclick="setValueAndNext('typ', 'byt', 'step2_byt', 'step1')" class="border p-4 rounded-lg hover:bg-green-100">Byt<br><small>Bytová jednotka v domě</small></button>
+        <button onclick="setValueAndNext('typ', 'byt', 'step2_byt1', 'step1')" class="border p-4 rounded-lg hover:bg-green-100">Byt<br><small>Bytová jednotka v domě</small></button>
         <button onclick="setValueAndNext('typ', 'dum', 'step2_dum1', 'step1')" class="border p-4 rounded-lg hover:bg-green-100">Rodinný dům<br><small>Samostatný nebo řadový dům</small></button>
         <button onclick="setValueAndNext('typ', 'pozemek', 'step2_pozemek', 'step1')" class="border p-4 rounded-lg hover:bg-green-100">Pozemek<br><small>Stavební parcela nebo zahrada</small></button>
         <button onclick="setValueAndNext('typ', 'komercni', 'step2_komercni', 'step1')" class="border p-4 rounded-lg hover:bg-green-100">Komerční nemovitost<br><small>Kancelář, obchod nebo jiný prostor</small></button>
       </div>
-      <input type="hidden" name="typ" />
     </div>
 
-    <!-- Krok 2a: Byt -->
-    <div id="step2_byt" class="step hidden">
-      <p class="mb-4 font-semibold">Vyberte dispozici bytu</p>
-      <select class="w-full mb-4 p-2 border rounded">
-        <option>1+kk</option>
-        <option>1+1</option>
-        <option>2+kk</option>
-        <option>2+1</option>
-        <option>3+kk</option>
-        <option>3+1</option>
-        <option>4+kk a větší</option>
-      </select>
-      <input type="text" class="w-full mb-4 p-2 border rounded" placeholder="Velikost v m²">
-      <select class="w-full mb-4 p-2 border rounded">
-        <option>Novostavba</option>
-        <option>Po rekonstrukci</option>
-        <option>Původní stav</option>
-      </select>
-      <select class="w-full mb-4 p-2 border rounded">
-        <option>Osobní vlastnictví</option>
-        <option>Družstevní</option>
-      </select>
-      <div class="flex justify-between">
-        <button onclick="goBack()" class="bg-gray-300 text-black px-4 py-2 rounded">Zpět</button>
-        <button onclick="showStep('step_final')" class="bg-green-600 text-white px-4 py-2 rounded">Pokračovat</button>
+    <!-- Krok Byt 1: Dispozice -->
+    <div id="step2_byt1" class="step hidden">
+      <p class="mb-4 font-semibold text-lg">Jaká je dispozice Vašeho bytu?</p>
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="setValueAndNext('dispozice', '1+kk', 'step2_byt2', 'step2_byt1')" class="border p-2 rounded hover:bg-green-100">1+kk</button>
+        <button onclick="setValueAndNext('dispozice', '1+1', 'step2_byt2', 'step2_byt1')" class="border p-2 rounded hover:bg-green-100">1+1</button>
+        <button onclick="setValueAndNext('dispozice', '2+kk', 'step2_byt2', 'step2_byt1')" class="border p-2 rounded hover:bg-green-100">2+kk</button>
+        <button onclick="setValueAndNext('dispozice', '2+1', 'step2_byt2', 'step2_byt1')" class="border p-2 rounded hover:bg-green-100">2+1</button>
+        <button onclick="setValueAndNext('dispozice', '3+kk', 'step2_byt2', 'step2_byt1')" class="border p-2 rounded hover:bg-green-100">3+kk</button>
+        <button onclick="setValueAndNext('dispozice', '3+1', 'step2_byt2', 'step2_byt1')" class="border p-2 rounded hover:bg-green-100">3+1</button>
+        <button onclick="setValueAndNext('dispozice', '4+kk a větší', 'step2_byt2', 'step2_byt1')" class="border p-2 rounded hover:bg-green-100">4+kk a větší</button>
+        <button onclick="setValueAndNext('dispozice', 'Atypický', 'step2_byt2', 'step2_byt1')" class="border p-2 rounded hover:bg-green-100">Atypický</button>
       </div>
+      <button onclick="goBack()" class="mt-4 bg-gray-300 text-black px-4 py-2 rounded">Zpět</button>
     </div>
 
-    <!-- Krok 2b: Dům (vícekrokový) -->
-    <div id="step2_dum1" class="step hidden">
-      <p class="mb-4 font-semibold">V jakém je dům stavu?</p>
-      <select class="w-full mb-4 p-2 border rounded">
-        <option>Novostavba</option>
-        <option>Po rekonstrukci</option>
-        <option>Původní stav</option>
-        <option>Nutná rekonstrukce</option>
-      </select>
-      <div class="flex justify-between">
-        <button onclick="goBack()" class="bg-gray-300 text-black px-4 py-2 rounded">Zpět</button>
-        <button onclick="setValueAndNext('stav_dum', 'vybrano', 'step2_dum2', 'step2_dum1')" class="bg-green-600 text-white px-4 py-2 rounded">Pokračovat</button>
+    <!-- Krok Byt 2: Velikost -->
+    <div id="step2_byt2" class="step hidden">
+      <p class="mb-4 font-semibold text-lg">Jaká je přibližná velikost Vaší nemovitosti?</p>
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="setValueAndNext('velikost', 'Do 50 m²', 'step2_byt3', 'step2_byt2')" class="border p-2 rounded hover:bg-green-100">Do 50 m²</button>
+        <button onclick="setValueAndNext('velikost', '50 - 100 m²', 'step2_byt3', 'step2_byt2')" class="border p-2 rounded hover:bg-green-100">50 - 100 m²</button>
+        <button onclick="setValueAndNext('velikost', '100 - 200 m²', 'step2_byt3', 'step2_byt2')" class="border p-2 rounded hover:bg-green-100">100 - 200 m²</button>
+        <button onclick="setValueAndNext('velikost', 'Nad 200 m²', 'step2_byt3', 'step2_byt2')" class="border p-2 rounded hover:bg-green-100">Nad 200 m²</button>
       </div>
-    </div>
-    <div id="step2_dum2" class="step hidden">
-      <p class="mb-4 font-semibold">Jsou k domu zavedeny sítě?</p>
-      <div class="mb-4">
-        <label class="block"><input type="checkbox"> Elektrika</label>
-        <label class="block"><input type="checkbox"> Voda</label>
-        <label class="block"><input type="checkbox"> Kanalizace</label>
-        <label class="block"><input type="checkbox"> Plyn</label>
-      </div>
-      <div class="flex justify-between">
-        <button onclick="goBack()" class="bg-gray-300 text-black px-4 py-2 rounded">Zpět</button>
-        <button onclick="showStep('step_final')" class="bg-green-600 text-white px-4 py-2 rounded">Pokračovat</button>
-      </div>
+      <button onclick="goBack()" class="mt-4 bg-gray-300 text-black px-4 py-2 rounded">Zpět</button>
     </div>
 
-    <!-- Krok 2c: Pozemek -->
-    <div id="step2_pozemek" class="step hidden"></div>
-    <!-- Krok 2d: Komerční -->
-    <div id="step2_komercni" class="step hidden"></div>
+    <!-- Krok Byt 3: Lokalita -->
+    <div id="step2_byt3" class="step hidden">
+      <p class="mb-4 font-semibold text-lg">Kde se Vaše nemovitost nachází?</p>
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="setValueAndNext('lokalita', 'Hlavní město', 'step2_byt4', 'step2_byt3')" class="border p-2 rounded hover:bg-green-100">Hlavní město</button>
+        <button onclick="setValueAndNext('lokalita', 'Krajské město', 'step2_byt4', 'step2_byt3')" class="border p-2 rounded hover:bg-green-100">Krajské město</button>
+        <button onclick="setValueAndNext('lokalita', 'Okresní město', 'step2_byt4', 'step2_byt3')" class="border p-2 rounded hover:bg-green-100">Okresní město</button>
+        <button onclick="setValueAndNext('lokalita', 'Obec nebo vesnice', 'step2_byt4', 'step2_byt3')" class="border p-2 rounded hover:bg-green-100">Obec nebo vesnice</button>
+      </div>
+      <button onclick="goBack()" class="mt-4 bg-gray-300 text-black px-4 py-2 rounded">Zpět</button>
+    </div>
+
+    <!-- Krok Byt 4: Stav -->
+    <div id="step2_byt4" class="step hidden">
+      <p class="mb-4 font-semibold text-lg">V jakém stavu je Vaše nemovitost?</p>
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="setValueAndNext('stav', 'Novostavba', 'step2_byt5', 'step2_byt4')" class="border p-2 rounded hover:bg-green-100">Novostavba</button>
+        <button onclick="setValueAndNext('stav', 'Po rekonstrukci', 'step2_byt5', 'step2_byt4')" class="border p-2 rounded hover:bg-green-100">Po rekonstrukci</button>
+        <button onclick="setValueAndNext('stav', 'Dobrý stav', 'step2_byt5', 'step2_byt4')" class="border p-2 rounded hover:bg-green-100">Dobrý stav</button>
+        <button onclick="setValueAndNext('stav', 'K rekonstrukci', 'step2_byt5', 'step2_byt4')" class="border p-2 rounded hover:bg-green-100">K rekonstrukci</button>
+      </div>
+      <button onclick="goBack()" class="mt-4 bg-gray-300 text-black px-4 py-2 rounded">Zpět</button>
+    </div>
+
+    <!-- Krok Byt 5: Účel ocenění -->
+    <div id="step2_byt5" class="step hidden">
+      <p class="mb-4 font-semibold text-lg">Jaký je účel ocenění?</p>
+      <div class="grid grid-cols-1 gap-2">
+        <button onclick="setValueAndNext('ucel', 'Prodej', 'step2_byt6', 'step2_byt5')" class="border p-2 rounded hover:bg-green-100">Prodej</button>
+        <button onclick="setValueAndNext('ucel', 'Dědictví', 'step_final', 'step2_byt5')" class="border p-2 rounded hover:bg-green-100">Dědictví</button>
+        <button onclick="setValueAndNext('ucel', 'Pouze ze zajímavosti', 'step_final', 'step2_byt5')" class="border p-2 rounded hover:bg-green-100">Pouze ze zajímavosti</button>
+      </div>
+      <button onclick="goBack()" class="mt-4 bg-gray-300 text-black px-4 py-2 rounded">Zpět</button>
+    </div>
+
+    <!-- Krok Byt 6: Termín prodeje -->
+    <div id="step2_byt6" class="step hidden">
+      <p class="mb-4 font-semibold text-lg">Do kdy chcete prodat?</p>
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="setValueAndNext('termin', 'Ihned', 'step_final', 'step2_byt6')" class="border p-2 rounded hover:bg-green-100">Ihned</button>
+        <button onclick="setValueAndNext('termin', 'Do 3 měsíců', 'step_final', 'step2_byt6')" class="border p-2 rounded hover:bg-green-100">Do 3 měsíců</button>
+        <button onclick="setValueAndNext('termin', 'Do 6 měsíců', 'step_final', 'step2_byt6')" class="border p-2 rounded hover:bg-green-100">Do 6 měsíců</button>
+        <button onclick="setValueAndNext('termin', 'Nespěchám', 'step_final', 'step2_byt6')" class="border p-2 rounded hover:bg-green-100">Nespěchám</button>
+      </div>
+      <button onclick="goBack()" class="mt-4 bg-gray-300 text-black px-4 py-2 rounded">Zpět</button>
+    </div>
+
     <!-- Finální krok -->
     <div id="step_final" class="step hidden">
-      <p class="mb-4 font-semibold">Děkujeme za vyplnění údajů. Brzy se vám ozveme s odhadem ceny.</p>
+      <p class="mb-4 font-semibold text-lg">Zadejte prosím své kontaktní údaje:</p>
+      <input type="text" placeholder="Jméno a příjmení" class="w-full mb-2 p-2 border rounded">
+      <input type="email" placeholder="E-mail" class="w-full mb-2 p-2 border rounded">
+      <input type="tel" placeholder="Telefon" class="w-full mb-4 p-2 border rounded">
+      <button onclick="showStep('step_thanks')" class="bg-green-600 text-white px-4 py-2 rounded">Odeslat</button>
+    </div>
+
+    <!-- Poděkování -->
+    <div id="step_thanks" class="step hidden">
+      <p class="text-lg font-semibold text-center">Děkujeme! Náš expert Vás bude kontaktovat do 24 hodin.</p>
     </div>
 
   </div>
