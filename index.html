@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ocenění nemovitosti zdarma</title>
-  <link href="https://https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
     .hidden { display: none; }
     .progress-bar { height: 8px; background-color: #d1d5db; border-radius: 9999px; }
@@ -39,42 +39,22 @@
     const commonSteps = [
       {
         title: 'Jaká je přibližná velikost Vaší nemovitosti?',
-        options: [
-          { label: 'Do 50 m²', desc: 'Menší nemovitost' },
-          { label: '50 - 100 m²', desc: 'Středně velká nemovitost' },
-          { label: '100 - 200 m²', desc: 'Větší nemovitost' },
-          { label: 'Nad 200 m²', desc: 'Velmi velká nemovitost' }
-        ],
+        options: ['Do 50 m²', '50 - 100 m²', '100 - 200 m²', 'Nad 200 m²'],
         progress: 43
       },
       {
         title: 'Kde se Vaše nemovitost nachází?',
-        options: [
-          { label: 'Hlavní město', desc: 'Praha' },
-          { label: 'Krajské město', desc: 'Brno, Ostrava, Plzeň, atd.' },
-          { label: 'Okresní město', desc: 'Menší město' },
-          { label: 'Obec nebo vesnice', desc: 'Menší obec' }
-        ],
+        options: ['Hlavní město', 'Krajské město', 'Okresní město', 'Obec nebo vesnice'],
         progress: 57
       },
       {
         title: 'V jakém stavu je Vaše nemovitost?',
-        options: [
-          { label: 'Novostavba', desc: 'Nová nebo téměř nová' },
-          { label: 'Po rekonstrukci', desc: 'Nedávno zrekonstruovaná' },
-          { label: 'Dobrý stav', desc: 'Udržovaná, bez nutnosti oprav' },
-          { label: 'K rekonstrukci', desc: 'Vyžaduje opravy nebo rekonstrukci' }
-        ],
+        options: ['Novostavba', 'Po rekonstrukci', 'Dobrý stav', 'K rekonstrukci'],
         progress: 71
       },
       {
         title: 'Kdy plánujete nemovitost prodat?',
-        options: [
-          { label: 'Co nejdříve', desc: 'V nejbližších týdnech' },
-          { label: 'Do 3 měsíců', desc: 'V blízké budoucnosti' },
-          { label: 'Do 6 měsíců', desc: 'V horizontu půl roku' },
-          { label: 'Zatím nevím', desc: 'Pouze zjišťuji možnosti' }
-        ],
+        options: ['Co nejdříve', 'Do 3 měsíců', 'Do 6 měsíců', 'Zatím nevím'],
         progress: 86
       },
       {
@@ -86,26 +66,14 @@
 
     const introStep = {
       title: 'Jaký typ nemovitosti chcete ocenit?',
-      options: [
-        { label: 'Byt', desc: 'Bytová jednotka v domě', next: 'byt' },
-        { label: 'Rodinný dům', desc: 'Samostatný dům nebo řadový dům', next: 'dum' }
-      ],
+      options: ['Byt', 'Rodinný dům'],
       progress: 14
     };
 
     const stepsByt = [
       {
         title: 'Jaká je dispozice Vašeho bytu?',
-        options: [
-          { label: '1+kk', desc: 'Jedna místnost s kuchyňským koutem' },
-          { label: '1+1', desc: 'Jedna místnost a samostatná kuchyň' },
-          { label: '2+kk', desc: 'Dvě místnosti s kuchyňským koutem' },
-          { label: '2+1', desc: 'Dvě místnosti a samostatná kuchyň' },
-          { label: '3+kk', desc: 'Tři místnosti s kuchyňským koutem' },
-          { label: '3+1', desc: 'Tři místnosti a samostatná kuchyň' },
-          { label: '4+kk a větší', desc: 'Čtyři a více místností' },
-          { label: 'Atypický', desc: 'Nestandardní dispozice' }
-        ],
+        options: ['1+kk', '1+1', '2+kk', '2+1', '3+kk', '3+1', '4+kk a větší', 'Atypický'],
         progress: 29
       },
       ...commonSteps
@@ -114,20 +82,16 @@
     const stepsDum = [
       {
         title: 'Jaký typ domu chcete ocenit?',
-        options: [
-          { label: 'Řadový dům', desc: 'Dům v řadové zástavbě' },
-          { label: 'Samostatný dům', desc: 'Stojící samostatně' },
-          { label: 'Vícegenerační dům', desc: 'Pro více rodin' },
-          { label: 'Vila', desc: 'Luxusní nebo rozlehlá nemovitost' }
-        ],
+        options: ['Řadový dům', 'Samostatný dům', 'Vícegenerační dům', 'Vila'],
         progress: 29
       },
       ...commonSteps
     ];
 
-    function renderStepObject(step, onClickFn) {
+    function renderStep(stepIndex) {
       const container = document.getElementById('form-content');
-      document.getElementById('progress-text').textContent = `Krok ${currentStep + 1} z ${steps.length}`;
+      const step = steps[stepIndex];
+      document.getElementById('progress-text').textContent = `Krok ${stepIndex + 1} z ${steps.length}`;
       document.getElementById('progress-percentage').textContent = `${step.progress}%`;
       document.getElementById('progress-fill').style.width = `${step.progress}%`;
 
@@ -145,33 +109,45 @@
           <button class="mt-4 bg-green-600 text-white px-4 py-2 rounded">Odeslat</button>
         `;
       } else {
-        container.innerHTML = `<p class="font-semibold mb-4">${step.title}</p><div class="grid grid-cols-2 gap-4">${
-          step.options.map((opt, i) => `<button onclick="(${onClickFn})(\'${opt.next || ''}\')" class='border p-3 rounded hover:bg-green-100'>${opt.label}<br><span class='text-sm'>${opt.desc}</span></button>`).join('')}</div>`;
+        container.innerHTML = `
+          <p class="font-semibold mb-4">${step.title}</p>
+          <div class="grid grid-cols-2 gap-4">
+            ${step.options.map(option => `
+              <button onclick="handleStep(${stepIndex + 1})" class="border p-3 rounded hover:bg-green-100">${option}</button>
+            `).join('')}
+          </div>
+        `;
       }
     }
 
-    function renderIntro() {
-      renderStepObject(introStep, (type) => {
-        selectedType = type;
-        steps = type === 'byt' ? stepsByt : stepsDum;
-        currentStep = 0;
-        renderStep(currentStep);
-      });
-    }
-
-    function renderStep(index) {
-      const step = steps[index];
-      renderStepObject(step, () => {
-        if (index + 1 < steps.length) {
-          currentStep++;
-          renderStep(currentStep);
-        }
-      });
+    function handleStep(nextIndex) {
+      if (nextIndex < steps.length) {
+        renderStep(nextIndex);
+      }
     }
 
     window.onload = () => {
-      renderIntro();
-    };
+      const container = document.getElementById('form-content');
+      document.getElementById('progress-text').textContent = `Krok 1 z 7`;
+      document.getElementById('progress-percentage').textContent = `${introStep.progress}%`;
+      document.getElementById('progress-fill').style.width = `${introStep.progress}%`;
+
+      container.innerHTML = `
+        <p class="font-semibold mb-4">${introStep.title}</p>
+        <div class="grid grid-cols-2 gap-4">
+          ${introStep.options.map(type => `
+            <button onclick="startForm('${type}')" class="border p-3 rounded hover:bg-green-100">${type}</button>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function startForm(type) {
+      selectedType = type;
+      currentStep = 0;
+      steps = type === 'Byt' ? stepsByt : stepsDum;
+      renderStep(currentStep);
+    }
   </script>
 </body>
 </html>
