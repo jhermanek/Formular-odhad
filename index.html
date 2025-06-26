@@ -7,44 +7,45 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
     body {
-      background-image: url('https://i.imgur.com/EVd9ZCx.jpg'); /* stylizované pozadí s baráčkem */
+      background-image: url('https://images.unsplash.com/photo-1560184897-c0c9b8893aee');
       background-size: cover;
-      background-repeat: no-repeat;
       background-position: center;
+      font-family: 'Segoe UI', sans-serif;
     }
     .progress-bar { height: 8px; background-color: #2d3748; border-radius: 9999px; }
     .progress-fill { height: 100%; background-color: #48bb78; border-radius: 9999px; transition: width 0.3s ease-in-out; }
-    .fade-enter {
-      opacity: 0;
-      transform: translateY(20px);
+    .card-selected { border: 2px solid #48bb78; }
+    .fade-enter { opacity: 0; transform: translateY(20px); }
+    .fade-enter-active { opacity: 1; transform: translateY(0); transition: opacity 0.4s ease-out, transform 0.4s ease-out; }
+    #intro-screen {
+      background: rgba(0,0,0,0.7);
+      padding: 2rem;
+      border-radius: 1rem;
+      text-align: center;
+      max-width: 600px;
+      margin: 10vh auto;
+      color: white;
     }
-    .fade-enter-active {
-      opacity: 1;
-      transform: translateY(0);
-      transition: opacity 0.4s ease-out, transform 0.4s ease-out;
-    }
-    .firework {
+    #fireworks {
       position: fixed;
-      width: 5px;
-      height: 5px;
-      background-color: #ff0;
-      border-radius: 50%;
-      animation: explode 1.5s ease-out forwards;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 1000;
     }
-    @keyframes explode {
-      0% { transform: scale(1); opacity: 1; }
-      100% { transform: scale(10); opacity: 0; }
-    }
+    canvas { position: absolute; width: 100%; height: 100%; }
   </style>
 </head>
 <body class="text-white">
-  <div class="flex items-center justify-center min-h-screen">
-    <div class="bg-gray-900 bg-opacity-90 rounded-lg p-8 shadow-xl max-w-2xl w-full">
-      <div class="text-center">
-        <img src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" alt="Avatar" class="mx-auto w-20 mb-4">
-        <h1 class="text-4xl font-bold text-green-400 mb-2">Ocenění nemovitosti zdarma</h1>
-        <p class="text-sm text-gray-300 mb-6">Zjistěte nezávazně a zdarma, za kolik se dá prodat Vaše nemovitost. Vyplnění formuláře trvá méně než 1 minutu a výsledky získáte do 24 hodin.</p>
-      </div>
+  <div id="intro-screen">
+    <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Logo baráčku" class="mx-auto w-24 mb-4">
+    <h1 class="text-3xl font-bold mb-4">Získejte zdarma odhad ceny Vaší nemovitosti!</h1>
+    <p class="mb-6">Vyplňte jednoduchý formulář a my se Vám do 24 hodin ozveme s cenou. Rychle, profesionálně a nezávazně.</p>
+    <button onclick="startIntro()" class="bg-green-500 hover:bg-green-600 px-6 py-2 rounded">Začít</button>
+  </div>
+
+  <div class="max-w-3xl mx-auto py-10 px-4 hidden" id="main-form">
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
       <div class="mb-4">
         <div class="flex justify-between text-sm mb-1">
           <span id="progress-text">Krok 1 z 7</span>
@@ -58,8 +59,9 @@
     </div>
   </div>
 
-  <audio id="fireworkSound" src="https://www.soundjay.com/explosion/explosion-02.mp3"></audio>
+  <canvas id="fireworks" class="hidden"></canvas>
 
+  <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.1.0/dist/fireworks.js"></script>
   <script>
     let selectedType = '';
     let currentStep = 0;
@@ -72,7 +74,11 @@
       { title: 'Zadejte své kontaktní údaje', form: true, progress: 100 }
     ];
 
-    const introStep = { title: 'Jaký typ nemovitosti chcete ocenit?', options: ['Byt', 'Rodinný dům', 'Pozemek', 'Komerční nemovitost'], progress: 14 };
+    const introStep = {
+      title: 'Jaký typ nemovitosti chcete ocenit?',
+      options: ['Byt', 'Rodinný dům', 'Pozemek', 'Komerční nemovitost'],
+      progress: 14
+    };
 
     const stepsByt = [
       { title: 'Jaká je dispozice Vašeho bytu?', options: ['1+kk', '1+1', '2+kk', '2+1', '3+kk', '3+1', '4+kk a větší', 'Atypický'], progress: 29 },
@@ -101,115 +107,79 @@
       ...commonSteps
     ];
 
-    function fadeTransition(callback) {
-      const container = document.getElementById('form-content');
-      container.classList.add('fade-enter');
-      setTimeout(() => {
-        callback();
-        container.classList.add('fade-enter-active');
-        setTimeout(() => {
-          container.classList.remove('fade-enter');
-          container.classList.remove('fade-enter-active');
-        }, 400);
-      }, 50);
-    }
-
-    function createFireworks() {
-      const container = document.body;
-      const sound = document.getElementById('fireworkSound');
-      sound.play();
-      for (let i = 0; i < 30; i++) {
-        const firework = document.createElement('div');
-        firework.classList.add('firework');
-        firework.style.left = Math.random() * window.innerWidth + 'px';
-        firework.style.top = Math.random() * window.innerHeight + 'px';
-        firework.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
-        container.appendChild(firework);
-        setTimeout(() => firework.remove(), 1500);
-      }
+    function startIntro() {
+      document.getElementById('intro-screen').classList.add('hidden');
+      document.getElementById('main-form').classList.remove('hidden');
+      renderStep(0);
     }
 
     function renderStep(stepIndex) {
-      fadeTransition(() => {
-        const container = document.getElementById('form-content');
-        const step = steps[stepIndex];
-        document.getElementById('progress-text').textContent = `Krok ${stepIndex + 1} z ${steps.length}`;
-        document.getElementById('progress-percentage').textContent = `${step.progress}%`;
-        document.getElementById('progress-fill').style.width = `${step.progress}%`;
+      const container = document.getElementById('form-content');
+      const step = steps[stepIndex];
+      currentStep = stepIndex;
+      document.getElementById('progress-text').textContent = `Krok ${stepIndex + 1} z ${steps.length}`;
+      document.getElementById('progress-percentage').textContent = `${step.progress}%`;
+      document.getElementById('progress-fill').style.width = `${step.progress}%`;
 
-        let backBtn = stepIndex > 0 ? `<button onclick="renderStep(${stepIndex - 1})" class="mb-4 text-sm underline">Zpět</button>` : '';
+      let backButton = stepIndex > 0 ? `<button onclick="renderStep(${stepIndex - 1})" class="mb-4 bg-gray-600 text-white px-3 py-1 rounded">Zpět</button>` : '';
 
-        if (step.form) {
-          container.innerHTML = `
-            ${backBtn}
-            <p class="font-semibold mb-4">${step.title}</p>
-            <input type="text" placeholder="Jméno a příjmení" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-            <input type="email" placeholder="E-mail" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-            <input type="tel" placeholder="Telefon" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-            <input type="text" placeholder="Upřesnění lokality (ulice, město, PSČ)" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-            <textarea placeholder="Popis lokality (např. blízkost školy, MHD, park...)" class="w-full mb-3 p-2 rounded bg-gray-700 text-white"></textarea>
-            <label class="block mb-1">
-              <input type="checkbox" class="mr-2"> Souhlasím se zpracováním osobních údajů
-            </label>
-            <button class="mt-4 bg-green-600 text-white px-4 py-2 rounded" onclick="finalStep()">Odeslat</button>
-          `;
-        } else if (step.customForm) {
-          container.innerHTML = `
-            ${backBtn}
-            <p class="font-semibold mb-4">${step.title}</p>
-            <input type="text" placeholder="Katastrální území" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-            <input type="text" placeholder="Číslo parcely" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-            <button onclick="handleStep(${stepIndex + 1})" class="bg-green-600 text-white px-4 py-2 rounded">Pokračovat</button>
-          `;
-        } else {
-          container.innerHTML = `
-            ${backBtn}
-            <p class="font-semibold mb-4">${step.title}</p>
-            <div class="grid grid-cols-2 gap-4">
-              ${step.options.map(option => `<button onclick="handleStep(${stepIndex + 1})" class="border border-gray-600 p-3 rounded hover:bg-green-600 hover:text-white">${option}</button>`).join('')}
-            </div>
-          `;
-        }
-      });
-    }
-
-    function handleStep(nextIndex) {
-      if (nextIndex < steps.length) {
-        renderStep(nextIndex);
+      if (step.form) {
+        container.innerHTML = `
+          ${backButton}
+          <p class="font-semibold mb-4">${step.title}</p>
+          <input type="text" placeholder="Jméno a příjmení" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
+          <input type="email" placeholder="E-mail" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
+          <input type="tel" placeholder="Telefon" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
+          <input type="text" placeholder="Upřesnění lokality (ulice, město, PSČ)" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
+          <textarea placeholder="Popis lokality..." class="w-full mb-3 p-2 rounded bg-gray-700 text-white"></textarea>
+          <label class="block mb-1"><input type="checkbox" class="mr-2"> Souhlasím se zpracováním osobních údajů</label>
+          <button class="mt-4 bg-green-600 text-white px-4 py-2 rounded" onclick="showFireworks()">Odeslat</button>
+        `;
+      } else if (step.customForm) {
+        container.innerHTML = `
+          ${backButton}
+          <p class="font-semibold mb-4">${step.title}</p>
+          <input type="text" placeholder="Katastrální území" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
+          <input type="text" placeholder="Číslo parcely" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
+          <button onclick="renderStep(${stepIndex + 1})" class="bg-green-600 text-white px-4 py-2 rounded">Pokračovat</button>
+        `;
+      } else {
+        container.innerHTML = `
+          ${backButton}
+          <p class="font-semibold mb-4">${step.title}</p>
+          <div class="grid grid-cols-2 gap-4">
+            ${step.options.map(option => `<button onclick="renderStep(${stepIndex + 1})" class="border border-gray-600 p-3 rounded hover:bg-green-600 hover:text-white">${option}</button>`).join('')}
+          </div>
+        `;
       }
     }
 
-    function finalStep() {
-      createFireworks();
-      const container = document.getElementById('form-content');
-      container.innerHTML = `
-        <h2 class="text-2xl font-bold text-center text-green-400 mb-4">🎉 Gratulujeme!</h2>
-        <p class="text-center">Vaše údaje byly úspěšně odeslány. Ozveme se Vám do 24 hodin s oceněním nemovitosti.</p>
-      `;
-    }
+    function showFireworks() {
+      const canvas = document.getElementById('fireworks');
+      canvas.classList.remove('hidden');
+      const fireworks = new Fireworks(canvas, { autoresize: true, opacity: 0.9 });
+      fireworks.start();
 
-    window.onload = () => {
-      const container = document.getElementById('form-content');
-      document.getElementById('progress-text').textContent = `Krok 1 z 7`;
-      document.getElementById('progress-percentage').textContent = `${introStep.progress}%`;
-      document.getElementById('progress-fill').style.width = `${introStep.progress}%`;
-
-      container.innerHTML = `
-        <p class="font-semibold mb-4">${introStep.title}</p>
-        <div class="grid grid-cols-2 gap-4">
-          ${introStep.options.map(type => `<button onclick="startForm('${type}')" class="border p-3 rounded hover:bg-green-600 hover:text-white">${type}</button>`).join('')}
+      document.getElementById('form-content').innerHTML = `
+        <div class="text-center mt-10">
+          <h2 class="text-2xl font-bold mb-4">🎉 Gratulujeme!</h2>
+          <p>Formulář byl úspěšně odeslán. Ozveme se Vám do 24 hodin s přesným oceněním.</p>
         </div>
       `;
+
+      const audio = new Audio('https://freesound.org/data/previews/331/331912_3248244-lq.mp3');
+      audio.play();
+
+      setTimeout(() => fireworks.stop(), 6000);
     }
 
     function startForm(type) {
       selectedType = type;
-      currentStep = 0;
       if (type === 'Byt') steps = stepsByt;
       else if (type === 'Rodinný dům') steps = stepsDum;
       else if (type === 'Pozemek') steps = stepsPozemek;
       else if (type === 'Komerční nemovitost') steps = stepsKomerce;
-      renderStep(currentStep);
+      renderStep(0);
     }
   </script>
 </body>
