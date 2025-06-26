@@ -28,32 +28,91 @@
       </div>
     </div>
 
-    <!-- Krok Dům 1: Stav domu -->
-    <div id="step2_dum1" class="step hidden">
-      <p class="mb-4 font-semibold text-lg">V jakém stavu je Váš rodinný dům?</p>
+    <!-- Krok Byt 1: Dispozice -->
+    <div id="step2_byt1" class="step hidden">
+      <p class="mb-4 font-semibold text-lg">Jaká je dispozice Vašeho bytu?</p>
       <div class="grid grid-cols-2 gap-2">
-        <button onclick="setValueAndNext('stav_dum', 'Novostavba', 'step2_dum2', 'step2_dum1')" class="border p-2 rounded hover:bg-green-100">Novostavba</button>
-        <button onclick="setValueAndNext('stav_dum', 'Po rekonstrukci', 'step2_dum2', 'step2_dum1')" class="border p-2 rounded hover:bg-green-100">Po rekonstrukci</button>
-        <button onclick="setValueAndNext('stav_dum', 'Dobrý stav', 'step2_dum2', 'step2_dum1')" class="border p-2 rounded hover:bg-green-100">Dobrý stav</button>
-        <button onclick="setValueAndNext('stav_dum', 'K rekonstrukci', 'step2_dum2', 'step2_dum1')" class="border p-2 rounded hover:bg-green-100">K rekonstrukci</button>
+        <button onclick="setValueAndNext('dispozice', '1+kk', 'step2_byt2', 'step2_byt1')" class="border p-2 rounded hover:bg-green-100">1+kk</button>
+        <button onclick="setValueAndNext('dispozice', '2+kk', 'step2_byt2', 'step2_byt1')" class="border p-2 rounded hover:bg-green-100">2+kk</button>
+        <button onclick="setValueAndNext('dispozice', '3+kk', 'step2_byt2', 'step2_byt1')" class="border p-2 rounded hover:bg-green-100">3+kk</button>
+        <button onclick="setValueAndNext('dispozice', '4+kk', 'step2_byt2', 'step2_byt1')" class="border p-2 rounded hover:bg-green-100">4+kk a více</button>
       </div>
       <button onclick="goBack()" class="mt-4 bg-gray-300 text-black px-4 py-2 rounded">Zpět</button>
     </div>
 
-    <!-- Krok Dům 2: Lokalita domu -->
-    <div id="step2_dum2" class="step hidden">
-      <p class="mb-4 font-semibold text-lg">Kde se Váš dům nachází?</p>
+    <!-- Krok Byt 2: Velikost -->
+    <div id="step2_byt2" class="step hidden">
+      <p class="mb-4 font-semibold text-lg">Jaká je přibližná velikost bytu?</p>
       <div class="grid grid-cols-2 gap-2">
-        <button onclick="setValueAndNext('lokalita_dum', 'Hlavní město', 'step2_dum3', 'step2_dum2')" class="border p-2 rounded hover:bg-green-100">Hlavní město</button>
-        <button onclick="setValueAndNext('lokalita_dum', 'Krajské město', 'step2_dum3', 'step2_dum2')" class="border p-2 rounded hover:bg-green-100">Krajské město</button>
-        <button onclick="setValueAndNext('lokalita_dum', 'Okresní město', 'step2_dum3', 'step2_dum2')" class="border p-2 rounded hover:bg-green-100">Okresní město</button>
-        <button onclick="setValueAndNext('lokalita_dum', 'Obec nebo vesnice', 'step2_dum3', 'step2_dum2')" class="border p-2 rounded hover:bg-green-100">Obec nebo vesnice</button>
+        <button onclick="setValueAndNext('velikost', 'do 50 m²', 'step2_byt3', 'step2_byt2')" class="border p-2 rounded hover:bg-green-100">do 50 m²</button>
+        <button onclick="setValueAndNext('velikost', '50–100 m²', 'step2_byt3', 'step2_byt2')" class="border p-2 rounded hover:bg-green-100">50–100 m²</button>
+        <button onclick="setValueAndNext('velikost', 'nad 100 m²', 'step2_byt3', 'step2_byt2')" class="border p-2 rounded hover:bg-green-100">nad 100 m²</button>
       </div>
       <button onclick="goBack()" class="mt-4 bg-gray-300 text-black px-4 py-2 rounded">Zpět</button>
     </div>
+
+    <!-- Krok Byt 3: Lokalita -->
+    <div id="step2_byt3" class="step hidden">
+      <p class="mb-4 font-semibold text-lg">Kde se nemovitost nachází?</p>
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="setValueAndNext('lokalita', 'Praha', 'step2_byt4', 'step2_byt3')" class="border p-2 rounded hover:bg-green-100">Praha</button>
+        <button onclick="setValueAndNext('lokalita', 'Brno', 'step2_byt4', 'step2_byt3')" class="border p-2 rounded hover:bg-green-100">Brno</button>
+        <button onclick="setValueAndNext('lokalita', 'Ostrava', 'step2_byt4', 'step2_byt3')" class="border p-2 rounded hover:bg-green-100">Ostrava</button>
+        <button onclick="setValueAndNext('lokalita', 'Jiné', 'step2_byt4', 'step2_byt3')" class="border p-2 rounded hover:bg-green-100">Jiné</button>
+      </div>
+      <button onclick="goBack()" class="mt-4 bg-gray-300 text-black px-4 py-2 rounded">Zpět</button>
+    </div>
+
+    <!-- Krok Byt 4: Stav -->
+    <div id="step2_byt4" class="step hidden">
+      <p class="mb-4 font-semibold text-lg">V jakém stavu je byt?</p>
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="setValueAndNext('stav', 'Nový', 'step2_byt5', 'step2_byt4')" class="border p-2 rounded hover:bg-green-100">Nový</button>
+        <button onclick="setValueAndNext('stav', 'Po rekonstrukci', 'step2_byt5', 'step2_byt4')" class="border p-2 rounded hover:bg-green-100">Po rekonstrukci</button>
+        <button onclick="setValueAndNext('stav', 'Původní', 'step2_byt5', 'step2_byt4')" class="border p-2 rounded hover:bg-green-100">Původní stav</button>
+      </div>
+      <button onclick="goBack()" class="mt-4 bg-gray-300 text-black px-4 py-2 rounded">Zpět</button>
+    </div>
+
+    <!-- Krok Byt 5: Účel -->
+    <div id="step2_byt5" class="step hidden">
+      <p class="mb-4 font-semibold text-lg">Jaký je účel ocenění?</p>
+      <div class="grid grid-cols-1 gap-2">
+        <button onclick="setValueAndNext('ucel', 'Prodej', 'step2_byt6', 'step2_byt5')" class="border p-2 rounded hover:bg-green-100">Prodej</button>
+        <button onclick="setValueAndNext('ucel', 'Dědictví', 'step_final', 'step2_byt5')" class="border p-2 rounded hover:bg-green-100">Dědictví</button>
+        <button onclick="setValueAndNext('ucel', 'Zajímavost', 'step_final', 'step2_byt5')" class="border p-2 rounded hover:bg-green-100">Pouze ze zajímavosti</button>
+      </div>
+      <button onclick="goBack()" class="mt-4 bg-gray-300 text-black px-4 py-2 rounded">Zpět</button>
+    </div>
+
+    <!-- Krok Byt 6: Termín -->
+    <div id="step2_byt6" class="step hidden">
+      <p class="mb-4 font-semibold text-lg">Do kdy chcete prodat?</p>
+      <div class="grid grid-cols-2 gap-2">
+        <button onclick="setValueAndNext('termin', 'Ihned', 'step_final', 'step2_byt6')" class="border p-2 rounded hover:bg-green-100">Ihned</button>
+        <button onclick="setValueAndNext('termin', 'Do 3 měsíců', 'step_final', 'step2_byt6')" class="border p-2 rounded hover:bg-green-100">Do 3 měsíců</button>
+        <button onclick="setValueAndNext('termin', 'Do 6 měsíců', 'step_final', 'step2_byt6')" class="border p-2 rounded hover:bg-green-100">Do 6 měsíců</button>
+        <button onclick="setValueAndNext('termin', 'Nespěchám', 'step_final', 'step2_byt6')" class="border p-2 rounded hover:bg-green-100">Nespěchám</button>
+      </div>
+      <button onclick="goBack()" class="mt-4 bg-gray-300 text-black px-4 py-2 rounded">Zpět</button>
+    </div>
+
+    <!-- Finální formulář -->
+    <div id="step_final" class="step hidden">
+      <p class="mb-4 font-semibold text-lg">Zadejte své kontaktní údaje</p>
+      <input type="text" placeholder="Jméno" class="w-full p-2 mb-2 border rounded">
+      <input type="email" placeholder="E-mail" class="w-full p-2 mb-2 border rounded">
+      <input type="tel" placeholder="Telefon" class="w-full p-2 mb-4 border rounded">
+      <button onclick="showThanks()" class="bg-green-600 text-white px-4 py-2 rounded">Odeslat</button>
+      <button onclick="goBack()" class="ml-2 bg-gray-300 text-black px-4 py-2 rounded">Zpět</button>
+    </div>
+
+    <div id="step_thanks" class="step hidden">
+      <p class="text-center font-bold text-xl">Děkujeme! Náš expert Vás bude kontaktovat do 24 hodin.</p>
+    </div>
+
   </div>
 
-  <!-- Funkce pro přepínání kroků -->
   <script>
     let historyStack = [];
 
@@ -73,6 +132,11 @@
         currentStep.classList.add('hidden');
         document.getElementById(previousStepId).classList.remove('hidden');
       }
+    }
+
+    function showThanks() {
+      document.querySelectorAll('.step').forEach(s => s.classList.add('hidden'));
+      document.getElementById('step_thanks').classList.remove('hidden');
     }
   </script>
 </body>
