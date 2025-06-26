@@ -112,6 +112,52 @@
         <button onclick="setValueAndNext('termin', 'do 6 měsíců', 'step_final', 'step_byt_termin')" class="border p-4 rounded-lg hover:bg-green-100">Do 6 měsíců</button>
         <button onclick="setValueAndNext('termin', 'nespěchám', 'step_final', 'step_byt_termin')" class="border p-4 rounded-lg hover:bg-green-100">Nespěchám</button>
       </div>
-    </div>
+    </div><script>
+let historyStack = [];
+let totalSteps = document.querySelectorAll('.slide').length;
+let currentStepIndex = 0;
+
+function updateProgressBar() {
+  const progress = document.getElementById('progressBar');
+  const percent = Math.round((currentStepIndex / (totalSteps - 1)) * 100);
+  progress.style.width = percent + '%';
+}
+
+function setValueAndNext(field, value, nextStepId, currentStepId) {
+  const currentStep = document.getElementById(currentStepId);
+  const nextStep = document.getElementById(nextStepId);
+  if (!currentStep || !nextStep) return;
+  currentStep.classList.remove('active');
+  currentStep.classList.add('exit');
+  nextStep.classList.add('active');
+  nextStep.classList.remove('exit');
+  historyStack.push(currentStepId);
+  currentStepIndex++;
+  updateProgressBar();
+}
+
+function goBack() {
+  const currentStep = document.querySelector('.slide.active');
+  if (historyStack.length > 0) {
+    const previousStepId = historyStack.pop();
+    const previousStep = document.getElementById(previousStepId);
+    currentStep.classList.remove('active');
+    previousStep.classList.add('active');
+    currentStepIndex--;
+    updateProgressBar();
+  }
+}
+
+function showThanks() {
+  const currentStep = document.querySelector('.slide.active');
+  const thanksStep = document.getElementById('step_thanks');
+  currentStep.classList.remove('active');
+  thanksStep.classList.add('active');
+  currentStepIndex = totalSteps - 1;
+  updateProgressBar();
+}
+
+updateProgressBar();
+</script>
 
 
