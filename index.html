@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ocenění nemovitosti zdarma</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <style>
     body {
@@ -47,9 +48,9 @@
   </div>
 
   <canvas id="confetti-canvas" class="hidden fixed top-0 left-0 w-full h-full pointer-events-none z-50"></canvas>
-  <audio id="confetti-sound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_d76c3f7497.mp3"></audio>
 
   <script>
+    emailjs.init("rRhQMHwrq3pvInTTE");
     let selectedType = '';
     let currentStep = 0;
     let steps = [];
@@ -59,7 +60,7 @@
       { title: 'Kde se Vaše nemovitost nachází?', options: ['Hlavní město', 'Krajské město', 'Okresní město', 'Obec nebo vesnice'], progress: 57 },
       { title: 'V jakém stavu je Vaše nemovitost?', options: ['Novostavba', 'Po rekonstrukci', 'Dobrý stav', 'K rekonstrukci'], progress: 71 },
       { title: 'Kdy plánujete nemovitost prodat?', options: ['Co nejdříve', 'Do 3 měsíců', 'Do 6 měsíců', 'Zatím nevím'], progress: 86 },
-      { title: 'Zadejte své kontaktní údaje', form: true, progress: 100 }
+      { title: 'Zadejte své kontaktní údeje', form: true, progress: 100 }
     ];
 
     const introStep = { title: 'Jaký typ nemovitosti chcete ocenit?', options: ['Byt', 'Rodinný dům', 'Pozemek', 'Komerční nemovitost'], progress: 14 };
@@ -74,15 +75,6 @@
       { title: 'Jaký typ domu chcete ocenit?', options: ['Řadový dům', 'Samostatný dům', 'Vícegenerační dům', 'Vila'], progress: 29 },
       { title: 'Jaká je přibližná velikost Vaší nemovitosti?', options: ['Do 50 m²', '50 - 100 m²', '100 - 200 m²', 'Nad 200 m²'], progress: 43 },
       ...commonSteps
-    ];
-
-    const stepsPozemek = [
-      { title: 'Jaký typ pozemku chcete ocenit?', options: ['Stavební', 'Zemědělský', 'Louka', 'Les', 'Komerční'], progress: 29 },
-      { title: 'Jaká je přibližná velikost pozemku?', options: ['Do 500 m²', '500 - 1000 m²', '1000 - 3000 m²', 'Nad 3000 m²'], progress: 43 },
-      { title: 'Jaké jsou dostupné sítě?', options: ['Všechny sítě', 'Elektřina + voda', 'Pouze elektřina', 'Žádné sítě'], progress: 57 },
-      { title: 'Jaký je přístup k pozemku?', options: ['Zpevněná cesta', 'Nezpevněná cesta', 'Bez přístupu'], progress: 71 },
-      { title: 'Uveďte katastrální území a číslo parcely', customForm: true, progress: 86 },
-      { title: 'Zadejte své kontaktní údaje', form: true, progress: 100 }
     ];
 
     const stepsKomerce = [
@@ -120,18 +112,11 @@
             <input type="email" id="email" placeholder="E-mail" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
             <input type="tel" id="telefon" placeholder="Telefon" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
             <input type="text" id="lokalita" placeholder="Upřesnění lokality (ulice, město, PSČ)" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-            <textarea id="popis" placeholder="Popis lokality (např. blízkost školy, MHD, park...)" class="w-full mb-3 p-2 rounded bg-gray-700 text-white"></textarea>
+            <textarea id="popis" placeholder="Popis lokality..." class="w-full mb-3 p-2 rounded bg-gray-700 text-white"></textarea>
             <label class="block mb-1">
               <input type="checkbox" class="mr-2"> Souhlasím se zpracováním osobních údajů
             </label>
             <button onclick="submitForm()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded">Odeslat</button>
-          `;
-        } else if (step.customForm) {
-          container.innerHTML = `
-            <p class="font-semibold mb-4">${step.title}</p>
-            <input type="text" placeholder="Katastrální území" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-            <input type="text" placeholder="Číslo parcely" class="w-full mb-3 p-2 rounded bg-gray-700 text-white">
-            <button onclick="handleStep(${stepIndex + 1})" class="bg-green-600 text-white px-4 py-2 rounded">Pokračovat</button>
           `;
         } else {
           container.innerHTML = `
@@ -189,42 +174,13 @@
       currentStep = 0;
       if (type === 'Byt') steps = stepsByt;
       else if (type === 'Rodinný dům') steps = stepsDum;
-      else if (type === 'Pozemek') steps = stepsPozemek;
       else if (type === 'Komerční nemovitost') steps = stepsKomerce;
       renderStep(currentStep);
     }
 
-    async function submitForm() {
-      const email = document.getElementById('email').value;
-      const jmeno = document.getElementById('jmeno').value;
-      const telefon = document.getElementById('telefon').value;
-      const lokalita = document.getElementById('lokalita').value;
-
-      const data = {
-        email: email,
-        typ: selectedData.typ,
-        velikost: selectedData.velikost,
-        lokalita: lokalita
-      };
-
-      try {
-        await fetch("https://script.google.com/macros/s/AKfycbxH-IHkFSzz02GH19gS2xWjaivlB1Psu3vc972yovhJupnbh96ckFgEt6vJY4tS1X4LZg/exec", {
-          method: "POST",
-          body: JSON.stringify(data),
-          headers: { "Content-Type": "application/json" }
-        });
-        showCelebration();
-      } catch (error) {
-        alert("Nepodařilo se odeslat formulář. Zkuste to prosím znovu.");
-        console.error(error);
-      }
-    }
-
     function showCelebration() {
       const canvas = document.getElementById('confetti-canvas');
-      const audio = document.getElementById('confetti-sound');
       canvas.classList.remove('hidden');
-      audio.play();
       const myConfetti = confetti.create(canvas, { resize: true });
       myConfetti({ particleCount: 300, spread: 120 });
       setTimeout(() => {
