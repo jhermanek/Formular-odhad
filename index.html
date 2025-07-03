@@ -377,6 +377,29 @@
 </style>
 </head>
 <body>
+  <!-- ===== SKRYTÝ IFRAME A FORM PRO ODESLÁNÍ DO GOOGLE SHEET ===== -->
+  <iframe name="hidden_iframe" style="display:none;"></iframe>
+  <form id="gsheet_form"
+        action="https://script.google.com/macros/s/AKfycbw9NItQuVHbYczQ-_0sVM2RXkQB6w8T5PRjXKUebY2BqwxcX8GOKMgyWREZ5e3eo5Cs5g/exec"
+        method="POST"
+        target="hidden_iframe">
+    <input type="hidden" name="timestamp">
+    <input type="hidden" name="property-type">
+    <input type="hidden" name="flat-size">
+    <input type="hidden" name="heating">
+    <input type="hidden" name="balcony-condition">
+    <input type="hidden" name="floor-type">
+    <input type="hidden" name="reason">
+    <input type="hidden" name="sale-term">
+    <input type="hidden" name="location">
+    <input type="hidden" name="extra-info">
+    <input type="hidden" name="name">
+    <input type="hidden" name="email">
+    <input type="hidden" name="phone">
+    <input type="hidden" name="consent">
+  </form>
+  <!-- ======================================================== -->
+380   <div class="form-wrapper">
 <div class="form-wrapper">
 
   <div class="progress-container" aria-label="Průběh dotazníku">
@@ -1531,15 +1554,26 @@
     inputConsent.addEventListener('change', validateContact);
 
     btnSubmit.addEventListener('click', () => {
-      if (!btnSubmit.disabled) {
-        answers['name'] = inputName.value.trim();
-        answers['email'] = inputEmail.value.trim();
-        answers['phone'] = inputPhone.value.trim();
-        answers['consent'] = inputConsent.checked;
-        // TODO: zde může být volání na backend pro odeslání dat
-        goToStep(currentStepIndex + 1);
-        startFireworks();
-      }
+  if (btnSubmit.disabled) return;
+
+  // 1) doplníme kontaktní údaje do answers
+  answers['name']    = inputName.value.trim();
+  answers['email']   = inputEmail.value.trim();
+  answers['phone']   = inputPhone.value.trim();
+  answers['consent'] = inputConsent.checked ? 'ANO' : 'NE';
+
+  // 2) naplníme skrytý form a odešleme do Google Sheets
+  const formEl = document.getElementById('gsheet_form');
+  Object.entries(answers).forEach(([key, val]) => {
+    const inp = formEl.querySelector(`input[name="${key}"]`);
+    if (inp) inp.value = val;
+  });
+  formEl.submit();  // odešle data do hidden_iframe bez CORS
+
+  // 3) přepneme na děkovací obrazovku + spustíme ohňostroj
+  goToStep(currentStepIndex + 1);
+  startFireworks();
+});
     });
 
     document.getElementById('btn-back-11-contact').addEventListener('click', () => {
