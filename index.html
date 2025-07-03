@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Interaktivní dotazník ocenění nemovitosti</title>
 <style>
-  /* --- Tady vlož celý tvůj CSS styl přesně tak, jak jsi poslal --- */
   body {
     background: #f0fdfa;
     font-family: 'Poppins', sans-serif;
@@ -103,7 +102,6 @@
     50% { transform: rotate(1.2deg); }
   }
 
-  /* Additional styling for questions */
   .question-section {
     display: none;
     text-align: center;
@@ -201,7 +199,6 @@
     cursor: pointer;
   }
 
-  /* Contact form inputs */
   .contact-input {
     width: 100%;
     max-width: 400px;
@@ -220,7 +217,6 @@
     background-color: #b7f0cd;
   }
 
-  /* Progress bar */
   .progress-container {
     height: 22px;
     background: #d1fae5;
@@ -248,7 +244,6 @@
     text-shadow: 0 0 2px rgba(255,255,255,0.6);
   }
 
-  /* Button group for navigation */
   .btn-group {
     display: flex;
     justify-content: space-between;
@@ -278,7 +273,6 @@
     background: #065f46;
   }
 
-  /* Final fireworks */
   .fireworks-container {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -298,7 +292,6 @@
     50% { text-shadow: 0 0 22px #22c55e, 0 0 30px #bbf7d0; }
   }
 
-  /* Responsive styles */
   @media (max-width: 768px) {
     .form-wrapper {
       width: 90vw;
@@ -410,8 +403,6 @@
   </div>
 
   <!-- BYT SECTIONS -->
-
-  <!-- Section 2: Byt - Velikost -->
   <div id="section2-byt" class="question-section" role="region" aria-labelledby="section2-header">
     <h2 id="section2-header">Jaká je velikost bytu?</h2>
     <div class="options-grid-small" role="list">
@@ -446,7 +437,6 @@
     </div>
   </div>
 
-  <!-- Section 3: Byt - Stav -->
   <div id="section3-byt" class="question-section" role="region" aria-labelledby="section3-header">
     <h2 id="section3-header">Jaký je stav bytu?</h2>
     <div class="options-grid-small" role="list">
@@ -473,7 +463,6 @@
     </div>
   </div>
 
-  <!-- Section 4: Byt - Typ vytápění -->
   <div id="section4-heating" class="question-section" role="region" aria-labelledby="section4-heating-header">
     <h2 id="section4-heating-header">Jaký typ vytápění má byt?</h2>
     <div class="options-grid-small" role="list">
@@ -500,7 +489,6 @@
     </div>
   </div>
 
-  <!-- Section 5: Byt - Stav balkonu -->
   <div id="section5-balcony" class="question-section" role="region" aria-labelledby="section5-balcony-header">
     <h2 id="section5-balcony-header">Jaký je stav balkonu?</h2>
     <div class="options-grid-small" role="list">
@@ -531,7 +519,6 @@
     </div>
   </div>
 
-  <!-- Section 6: Byt - Typ podlahy -->
   <div id="section6-floor" class="question-section" role="region" aria-labelledby="section6-floor-header">
     <h2 id="section6-floor-header">Jaký typ podlahy je v bytě?</h2>
     <div class="options-grid-small" role="list">
@@ -563,8 +550,6 @@
   </div>
 
   <!-- DŮM sekce -->
-
-  <!-- Section 2-dum: Velikost domu -->
   <div id="section2-dum" class="question-section" role="region" aria-labelledby="section2-dum-header">
     <h2 id="section2-dum-header">Jaká je velikost domu (v m²)?</h2>
     <div class="options-grid-small" role="list">
@@ -595,7 +580,6 @@
     </div>
   </div>
 
-  <!-- Section 3-dum: Typ domu -->
   <div id="section3-dum" class="question-section" role="region" aria-labelledby="section3-dum-header">
     <h2 id="section3-dum-header">Jaký typ domu máte?</h2>
     <div class="options-grid-small" role="list">
@@ -622,7 +606,6 @@
     </div>
   </div>
 
-  <!-- Section 4-dum: Stav domu -->
   <div id="section4-dum" class="question-section" role="region" aria-labelledby="section4-dum-header">
     <h2 id="section4-dum-header">Jaký je stav domu?</h2>
     <div class="options-grid-small" role="list">
@@ -649,7 +632,6 @@
     </div>
   </div>
 
-  <!-- Section 5-dum: Typ vytápění -->
   <div id="section5-dum-heating" class="question-section" role="region" aria-labelledby="section5-dum-heating-header">
     <h2 id="section5-dum-heating-header">Jaký typ vytápění má dům?</h2>
     <div class="options-grid-small" role="list">
@@ -676,7 +658,6 @@
     </div>
   </div>
 
-  <!-- Section 6-dum: Velikost pozemku -->
   <div id="section6-dum-plot" class="question-section" role="region" aria-labelledby="section6-dum-plot-header">
     <h2 id="section6-dum-plot-header">Jak velký je pozemek?</h2>
     <div class="options-grid-small" role="list">
@@ -703,7 +684,6 @@
     </div>
   </div>
 
-  <!-- Section 7-dum: Vybavení domu -->
   <div id="section7-dum-equipment" class="question-section" role="region" aria-labelledby="section7-dum-equipment-header">
     <h2 id="section7-dum-equipment-header">Jaké má dům vybavení?</h2>
     <div class="checkbox-group">
@@ -720,8 +700,6 @@
   </div>
 
   <!-- POZEMEK sekce -->
-
-  <!-- Section 2-pozemek: Velikost pozemku -->
   <div id="section2-pozemek" class="question-section" role="region" aria-labelledby="section2-pozemek-header">
     <h2 id="section2-pozemek-header">Jak velký je pozemek?</h2>
     <div class="options-grid-small" role="list">
@@ -748,7 +726,6 @@
     </div>
   </div>
 
-  <!-- Section 3-pozemek: Typ pozemku -->
   <div id="section3-pozemek" class="question-section" role="region" aria-labelledby="section3-pozemek-header">
     <h2 id="section3-pozemek-header">Jaký je typ pozemku?</h2>
     <div class="options-grid-small" role="list">
@@ -779,7 +756,6 @@
     </div>
   </div>
 
-  <!-- Section 4-pozemek: Přístupová cesta -->
   <div id="section4-pozemek" class="question-section" role="region" aria-labelledby="section4-pozemek-header">
     <h2 id="section4-pozemek-header">Má pozemek přístupovou cestu?</h2>
     <div class="options-grid-small" role="list">
@@ -799,8 +775,6 @@
   </div>
 
   <!-- KOMERČNÍ sekce -->
-
-  <!-- Section 2-komercni: Typ komerční nemovitosti -->
   <div id="section2-komercni" class="question-section" role="region" aria-labelledby="section2-komercni-header">
     <h2 id="section2-komercni-header">Jaký typ komerční nemovitosti máte?</h2>
     <div class="options-grid-small" role="list">
@@ -831,7 +805,6 @@
     </div>
   </div>
 
-  <!-- Section 3-komercni: Velikost plochy -->
   <div id="section3-komercni" class="question-section" role="region" aria-labelledby="section3-komercni-header">
     <h2 id="section3-komercni-header">Jaká je velikost plochy (m²)?</h2>
     <div class="options-grid-small" role="list">
@@ -858,7 +831,6 @@
     </div>
   </div>
 
-  <!-- Section 4-komercni: Stav komerční nemovitosti -->
   <div id="section4-komercni" class="question-section" role="region" aria-labelledby="section4-komercni-header">
     <h2 id="section4-komercni-header">Jaký je stav komerční nemovitosti?</h2>
     <div class="options-grid-small" role="list">
@@ -885,7 +857,6 @@
     </div>
   </div>
 
-  <!-- Section 5-komercni: Vytápění -->
   <div id="section5-komercni-heating" class="question-section" role="region" aria-labelledby="section5-komercni-heating-header">
     <h2 id="section5-komercni-heating-header">Jaký typ vytápění má komerční nemovitost?</h2>
     <div class="options-grid-small" role="list">
@@ -931,7 +902,6 @@
 </div>
 
 <script>
-  // --- Variables for form state ---
   const formState = {
     propertyType: null,
     flatSize: null,
@@ -961,19 +931,19 @@
     phone: ''
   };
 
-  // Show only the specified section, hide others
   function showSection(id) {
     document.querySelectorAll('.question-section').forEach(section => {
       if(section.id === id) {
         section.classList.add('active');
+        section.style.display = '';
       } else {
         section.classList.remove('active');
+        section.style.display = 'none';
       }
     });
     updateProgress(id);
   }
 
-  // Update progress bar and text
   function updateProgress(currentSection) {
     const steps = [
       'section1',
@@ -1013,14 +983,12 @@
     if(progressText) progressText.textContent = progressPercent + '%';
   }
 
-  // Setup click and keyboard navigation for option buttons
   function setupOptionButtons(containerSelector, groupName, onSelect) {
     const container = document.querySelector(containerSelector);
     if(!container) return;
 
     const buttons = container.querySelectorAll('.option-btn, .option-btn-small');
     buttons.forEach(btn => {
-      // Click event
       btn.addEventListener('click', () => {
         buttons.forEach(b => {
           b.setAttribute('aria-pressed', 'false');
@@ -1031,7 +999,6 @@
         onSelect(btn.dataset.value);
       });
 
-      // Keyboard support (Space and Enter)
       btn.addEventListener('keydown', e => {
         if(e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -1041,294 +1008,385 @@
     });
   }
 
-  // Setup checkboxes group (for house equipment)
-  function setupCheckboxGroup(containerSelector, groupName, onChange) {
-    const container = document.querySelector(containerSelector);
-    if(!container) return;
-
-    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-    checkboxes.forEach(checkbox => {
-      checkbox.addEventListener('change', () => {
-        onChange();
-      });
-    });
-  }
-
-  // Validate contact inputs to enable submit button
-  function validateContactInputs() {
-    const nameInput = document.getElementById('input-name');
-    const emailInput = document.getElementById('input-email');
-    const phoneInput = document.getElementById('input-phone');
-    const submitBtn = document.getElementById('btn-submit');
-
-    const nameVal = nameInput.value.trim();
-    const emailVal = emailInput.value.trim();
-
-    // Simple email validation regex
-    const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal);
-
-    if(nameVal && emailValid) {
-      submitBtn.disabled = false;
-    } else {
-      submitBtn.disabled = true;
+  // Initialize buttons for main property type selection
+  setupOptionButtons('#section1 .options-grid', 'propertyType', (value) => {
+    formState.propertyType = value;
+    // show next relevant section depending on property type
+    if(value === 'byt') {
+      showSection('section2-byt');
+      resetBytAnswers();
+    } else if(value === 'dum') {
+      showSection('section2-dum');
+      resetHouseAnswers();
+    } else if(value === 'pozemek') {
+      showSection('section2-pozemek');
+      resetPlotAnswers();
+    } else if(value === 'komercni') {
+      showSection('section2-komercni');
+      resetCommercialAnswers();
     }
+  });
+
+  // Helper to reset answers on property type switch
+  function resetBytAnswers() {
+    formState.flatSize = null;
+    formState.flatCondition = null;
+    formState.heating = null;
+    formState.balconyCondition = null;
+    formState.floorType = null;
+
+    disableButton('#btn-flat-size-next');
+    disableButton('#btn-flat-condition-next');
+    disableButton('#btn-heating-next');
+    disableButton('#btn-balcony-next');
+    disableButton('#btn-floor-next');
+  }
+  function resetHouseAnswers() {
+    formState.houseSize = null;
+    formState.houseType = null;
+    formState.houseCondition = null;
+    formState.houseHeating = null;
+    formState.plotSizeHouse = null;
+    formState.houseEquipment = [];
+
+    disableButton('#btn-house-size-next');
+    disableButton('#btn-house-type-next');
+    disableButton('#btn-house-condition-next');
+    disableButton('#btn-house-heating-next');
+    disableButton('#btn-plot-size-next');
+    disableButton('#btn-equipment-next');
+  }
+  function resetPlotAnswers() {
+    formState.plotSize = null;
+    formState.plotType = null;
+    formState.plotAccess = null;
+
+    disableButton('#btn-plot-next');
+    disableButton('#btn-plot-type-next');
+    disableButton('#btn-plot-access-next');
+  }
+  function resetCommercialAnswers() {
+    formState.commercialType = null;
+    formState.commercialArea = null;
+    formState.commercialCondition = null;
+    formState.commercialHeating = null;
+
+    disableButton('#btn-commercial-type-next');
+    disableButton('#btn-commercial-area-next');
+    disableButton('#btn-commercial-condition-next');
+    disableButton('#btn-commercial-heating-next');
   }
 
-  // Initialize
-  document.addEventListener('DOMContentLoaded', () => {
-    // SECTION 1 - property type
-    setupOptionButtons('#section1 .options-grid', 'propertyType', value => {
-      formState.propertyType = value;
-      // Show next section depending on propertyType
-      switch(value) {
-        case 'byt': showSection('section2-byt'); break;
-        case 'dum': showSection('section2-dum'); break;
-        case 'pozemek': showSection('section2-pozemek'); break;
-        case 'komercni': showSection('section2-komercni'); break;
+  function disableButton(selector) {
+    const btn = document.querySelector(selector);
+    if(btn) btn.disabled = true;
+  }
+  function enableButton(selector) {
+    const btn = document.querySelector(selector);
+    if(btn) btn.disabled = false;
+  }
+
+  // BYT steps logic
+  setupOptionButtons('#section2-byt .options-grid-small', 'flatSize', (val) => {
+    formState.flatSize = val;
+    enableButton('#btn-flat-size-next');
+  });
+  document.getElementById('btn-flat-size-next').addEventListener('click', () => {
+    showSection('section3-byt');
+  });
+  document.getElementById('btn-back-2').addEventListener('click', () => {
+    showSection('section1');
+  });
+
+  setupOptionButtons('#section3-byt .options-grid-small', 'flatCondition', (val) => {
+    formState.flatCondition = val;
+    enableButton('#btn-flat-condition-next');
+  });
+  document.getElementById('btn-flat-condition-next').addEventListener('click', () => {
+    showSection('section4-heating');
+  });
+  document.getElementById('btn-back-3').addEventListener('click', () => {
+    showSection('section2-byt');
+  });
+
+  setupOptionButtons('#section4-heating .options-grid-small', 'heating', (val) => {
+    formState.heating = val;
+    enableButton('#btn-heating-next');
+  });
+  document.getElementById('btn-heating-next').addEventListener('click', () => {
+    showSection('section5-balcony');
+  });
+  document.getElementById('btn-back-4-heating').addEventListener('click', () => {
+    showSection('section3-byt');
+  });
+
+  setupOptionButtons('#section5-balcony .options-grid-small', 'balconyCondition', (val) => {
+    formState.balconyCondition = val;
+    enableButton('#btn-balcony-next');
+  });
+  document.getElementById('btn-balcony-next').addEventListener('click', () => {
+    showSection('section6-floor');
+  });
+  document.getElementById('btn-back-5-balcony').addEventListener('click', () => {
+    showSection('section4-heating');
+  });
+
+  setupOptionButtons('#section6-floor .options-grid-small', 'floorType', (val) => {
+    formState.floorType = val;
+    enableButton('#btn-floor-next');
+  });
+  document.getElementById('btn-floor-next')?.addEventListener('click', () => {
+    showSection('section-final');
+  });
+  document.getElementById('btn-back-6-floor')?.addEventListener('click', () => {
+    showSection('section5-balcony');
+  });
+
+  // DŮM steps logic
+  setupOptionButtons('#section2-dum .options-grid-small', 'houseSize', (val) => {
+    formState.houseSize = val;
+    enableButton('#btn-house-size-next');
+  });
+  document.getElementById('btn-house-size-next').addEventListener('click', () => {
+    showSection('section3-dum');
+  });
+  document.getElementById('btn-back-2-dum').addEventListener('click', () => {
+    showSection('section1');
+  });
+
+  setupOptionButtons('#section3-dum .options-grid-small', 'houseType', (val) => {
+    formState.houseType = val;
+    enableButton('#btn-house-type-next');
+  });
+  document.getElementById('btn-house-type-next').addEventListener('click', () => {
+    showSection('section4-dum');
+  });
+  document.getElementById('btn-back-3-dum').addEventListener('click', () => {
+    showSection('section2-dum');
+  });
+
+  setupOptionButtons('#section4-dum .options-grid-small', 'houseCondition', (val) => {
+    formState.houseCondition = val;
+    enableButton('#btn-house-condition-next');
+  });
+  document.getElementById('btn-house-condition-next').addEventListener('click', () => {
+    showSection('section5-dum-heating');
+  });
+  document.getElementById('btn-back-4-dum').addEventListener('click', () => {
+    showSection('section3-dum');
+  });
+
+  setupOptionButtons('#section5-dum-heating .options-grid-small', 'houseHeating', (val) => {
+    formState.houseHeating = val;
+    enableButton('#btn-house-heating-next');
+  });
+  document.getElementById('btn-house-heating-next').addEventListener('click', () => {
+    showSection('section6-dum-plot');
+  });
+  document.getElementById('btn-back-5-dum-heating').addEventListener('click', () => {
+    showSection('section4-dum');
+  });
+
+  setupOptionButtons('#section6-dum-plot .options-grid-small', 'plotSizeHouse', (val) => {
+    formState.plotSizeHouse = val;
+    enableButton('#btn-plot-size-next');
+  });
+  document.getElementById('btn-plot-size-next').addEventListener('click', () => {
+    showSection('section7-dum-equipment');
+  });
+  document.getElementById('btn-back-6-dum-plot').addEventListener('click', () => {
+    showSection('section5-dum-heating');
+  });
+
+  // Equipment checkboxes
+  const equipmentCheckboxes = document.querySelectorAll('#section7-dum-equipment input[type="checkbox"]');
+  equipmentCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+      const val = checkbox.dataset.value;
+      if(checkbox.checked) {
+        if(!formState.houseEquipment.includes(val)) {
+          formState.houseEquipment.push(val);
+        }
+      } else {
+        formState.houseEquipment = formState.houseEquipment.filter(i => i !== val);
       }
     });
-
-    // --- BYT FLOW ---
-    setupOptionButtons('#section2-byt .options-grid-small', 'flatSize', value => {
-      formState.flatSize = value;
-      document.getElementById('btn-flat-size-next').disabled = false;
-    });
-    document.getElementById('btn-flat-size-next').addEventListener('click', () => {
-      showSection('section3-byt');
-      document.getElementById('btn-flat-condition-next').disabled = !formState.flatCondition;
-    });
-
-    setupOptionButtons('#section3-byt .options-grid-small', 'flatCondition', value => {
-      formState.flatCondition = value;
-      document.getElementById('btn-flat-condition-next').disabled = false;
-    });
-    document.getElementById('btn-flat-condition-next').addEventListener('click', () => {
-      showSection('section4-heating');
-      document.getElementById('btn-heating-next').disabled = !formState.heating;
-    });
-
-    setupOptionButtons('#section4-heating .options-grid-small', 'heating', value => {
-      formState.heating = value;
-      document.getElementById('btn-heating-next').disabled = false;
-    });
-    document.getElementById('btn-heating-next').addEventListener('click', () => {
-      showSection('section5-balcony');
-      document.getElementById('btn-balcony-next').disabled = !formState.balconyCondition;
-    });
-
-    setupOptionButtons('#section5-balcony .options-grid-small', 'balconyCondition', value => {
-      formState.balconyCondition = value;
-      document.getElementById('btn-balcony-next').disabled = false;
-    });
-    document.getElementById('btn-balcony-next').addEventListener('click', () => {
-      showSection('section6-floor');
-      document.getElementById('btn-floor-next').disabled = !formState.floorType;
-    });
-
-    setupOptionButtons('#section6-floor .options-grid-small', 'floorType', value => {
-      formState.floorType = value;
-      document.getElementById('btn-floor-next').disabled = false;
-    });
-    document.getElementById('btn-floor-next').addEventListener('click', () => {
-      showSection('section-final');
-      validateContactInputs();
-    });
-
-    // Back buttons for BYT
-    document.getElementById('btn-back-2').addEventListener('click', () => showSection('section1'));
-    document.getElementById('btn-back-3').addEventListener('click', () => showSection('section2-byt'));
-    document.getElementById('btn-back-4-heating').addEventListener('click', () => showSection('section3-byt'));
-    document.getElementById('btn-back-5-balcony').addEventListener('click', () => showSection('section4-heating'));
-    document.getElementById('btn-back-6-floor').addEventListener('click', () => showSection('section5-balcony'));
-
-    // --- DŮM FLOW ---
-    setupOptionButtons('#section2-dum .options-grid-small', 'houseSize', value => {
-      formState.houseSize = value;
-      document.getElementById('btn-house-size-next').disabled = false;
-    });
-    document.getElementById('btn-house-size-next').addEventListener('click', () => {
-      showSection('section3-dum');
-      document.getElementById('btn-house-type-next').disabled = !formState.houseType;
-    });
-
-    setupOptionButtons('#section3-dum .options-grid-small', 'houseType', value => {
-      formState.houseType = value;
-      document.getElementById('btn-house-type-next').disabled = false;
-    });
-    document.getElementById('btn-house-type-next').addEventListener('click', () => {
-      showSection('section4-dum');
-      document.getElementById('btn-house-condition-next').disabled = !formState.houseCondition;
-    });
-
-    setupOptionButtons('#section4-dum .options-grid-small', 'houseCondition', value => {
-      formState.houseCondition = value;
-      document.getElementById('btn-house-condition-next').disabled = false;
-    });
-    document.getElementById('btn-house-condition-next').addEventListener('click', () => {
-      showSection('section5-dum-heating');
-      document.getElementById('btn-house-heating-next').disabled = !formState.houseHeating;
-    });
-
-    setupOptionButtons('#section5-dum-heating .options-grid-small', 'houseHeating', value => {
-      formState.houseHeating = value;
-      document.getElementById('btn-house-heating-next').disabled = false;
-    });
-    document.getElementById('btn-house-heating-next').addEventListener('click', () => {
-      showSection('section6-dum-plot');
-      document.getElementById('btn-plot-size-next').disabled = !formState.plotSizeHouse;
-    });
-
-    setupOptionButtons('#section6-dum-plot .options-grid-small', 'plotSizeHouse', value => {
-      formState.plotSizeHouse = value;
-      document.getElementById('btn-plot-size-next').disabled = false;
-    });
-    document.getElementById('btn-plot-size-next').addEventListener('click', () => {
-      showSection('section7-dum-equipment');
-    });
-
-    setupCheckboxGroup('#section7-dum-equipment .checkbox-group', 'houseEquipment', () => {
-      const checkedBoxes = document.querySelectorAll('#section7-dum-equipment .checkbox-group input[type="checkbox"]:checked');
-      formState.houseEquipment = Array.from(checkedBoxes).map(cb => cb.dataset.value);
-    });
-    document.getElementById('btn-equipment-next').addEventListener('click', () => {
-      showSection('section-final');
-      validateContactInputs();
-    });
-
-    // Back buttons for DŮM
-    document.getElementById('btn-back-2-dum').addEventListener('click', () => showSection('section1'));
-    document.getElementById('btn-back-3-dum').addEventListener('click', () => showSection('section2-dum'));
-    document.getElementById('btn-back-4-dum').addEventListener('click', () => showSection('section3-dum'));
-    document.getElementById('btn-back-5-dum-heating').addEventListener('click', () => showSection('section4-dum'));
-    document.getElementById('btn-back-6-dum-plot').addEventListener('click', () => showSection('section5-dum-heating'));
-    document.getElementById('btn-back-7-dum-equipment').addEventListener('click', () => showSection('section6-dum-plot'));
-
-    // --- POZEMEK FLOW ---
-    setupOptionButtons('#section2-pozemek .options-grid-small', 'plotSize', value => {
-      formState.plotSize = value;
-      document.getElementById('btn-plot-next').disabled = false;
-    });
-    document.getElementById('btn-plot-next').addEventListener('click', () => {
-      showSection('section3-pozemek');
-      document.getElementById('btn-plot-type-next').disabled = !formState.plotType;
-    });
-
-    setupOptionButtons('#section3-pozemek .options-grid-small', 'plotType', value => {
-      formState.plotType = value;
-      document.getElementById('btn-plot-type-next').disabled = false;
-    });
-    document.getElementById('btn-plot-type-next').addEventListener('click', () => {
-      showSection('section4-pozemek');
-      document.getElementById('btn-plot-access-next').disabled = !formState.plotAccess;
-    });
-
-    setupOptionButtons('#section4-pozemek .options-grid-small', 'plotAccess', value => {
-      formState.plotAccess = value;
-      document.getElementById('btn-plot-access-next').disabled = false;
-    });
-    document.getElementById('btn-plot-access-next').addEventListener('click', () => {
-      showSection('section-final');
-      validateContactInputs();
-    });
-
-    // Back buttons for POZEMEK
-    document.getElementById('btn-back-2-pozemek').addEventListener('click', () => showSection('section1'));
-    document.getElementById('btn-back-3-pozemek').addEventListener('click', () => showSection('section2-pozemek'));
-    document.getElementById('btn-back-4-pozemek').addEventListener('click', () => showSection('section3-pozemek'));
-
-    // --- KOMERČNÍ FLOW ---
-    setupOptionButtons('#section2-komercni .options-grid-small', 'commercialType', value => {
-      formState.commercialType = value;
-      document.getElementById('btn-commercial-type-next').disabled = false;
-    });
-    document.getElementById('btn-commercial-type-next').addEventListener('click', () => {
-      showSection('section3-komercni');
-      document.getElementById('btn-commercial-area-next').disabled = !formState.commercialArea;
-    });
-
-    setupOptionButtons('#section3-komercni .options-grid-small', 'commercialArea', value => {
-      formState.commercialArea = value;
-      document.getElementById('btn-commercial-area-next').disabled = false;
-    });
-    document.getElementById('btn-commercial-area-next').addEventListener('click', () => {
-      showSection('section4-komercni');
-      document.getElementById('btn-commercial-condition-next').disabled = !formState.commercialCondition;
-    });
-
-    setupOptionButtons('#section4-komercni .options-grid-small', 'commercialCondition', value => {
-      formState.commercialCondition = value;
-      document.getElementById('btn-commercial-condition-next').disabled = false;
-    });
-    document.getElementById('btn-commercial-condition-next').addEventListener('click', () => {
-      showSection('section5-komercni-heating');
-      document.getElementById('btn-commercial-heating-next').disabled = !formState.commercialHeating;
-    });
-
-    setupOptionButtons('#section5-komercni-heating .options-grid-small', 'commercialHeating', value => {
-      formState.commercialHeating = value;
-      document.getElementById('btn-commercial-heating-next').disabled = false;
-    });
-    document.getElementById('btn-commercial-heating-next').addEventListener('click', () => {
-      showSection('section-final');
-      validateContactInputs();
-    });
-
-    // Back buttons for KOMERČNÍ
-    document.getElementById('btn-back-2-komercni').addEventListener('click', () => showSection('section1'));
-    document.getElementById('btn-back-3-komercni').addEventListener('click', () => showSection('section2-komercni'));
-    document.getElementById('btn-back-4-komercni').addEventListener('click', () => showSection('section3-komercni'));
-    document.getElementById('btn-back-5-komercni-heating').addEventListener('click', () => showSection('section4-komercni'));
-
-    // Contact inputs events
-    const nameInput = document.getElementById('input-name');
-    const emailInput = document.getElementById('input-email');
-    const phoneInput = document.getElementById('input-phone');
-
-    [nameInput, emailInput, phoneInput].forEach(input => {
-      input.addEventListener('input', () => {
-        formState.name = nameInput.value.trim();
-        formState.email = emailInput.value.trim();
-        formState.phone = phoneInput.value.trim();
-        validateContactInputs();
-      });
-    });
-
-    // Submit button
-    document.getElementById('btn-submit').addEventListener('click', async () => {
-      if (!formState.name || !formState.email) return;
-
-      // Disable button while sending
-      const submitBtn = document.getElementById('btn-submit');
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Odesílám...';
-
-      // Prepare data object to send
-      const dataToSend = {
-        propertyType: formState.propertyType,
-        flatSize: formState.flatSize,
-        flatCondition: formState.flatCondition,
-        heating: formState.heating,
-        balconyCondition: formState.balconyCondition,
-        floorType: formState.floorType,
-        houseSize: formState.houseSize,
-        houseType: formState.houseType,
-        houseCondition: formState.houseCondition,
-        houseHeating: formState.houseHeating,
-        plotSizeHouse: formState.plotSizeHouse,
-        houseEquipment: formState.houseEquipment,
-        plotSize: formState.plotSize,
-        plotType: formState.plotType,
-        plotAccess: formState.plotAccess,
-        commercialType: formState.commercialType,
-        commercialArea: formState.commercialArea,
-        commercialCondition: formState.commercialCondition,
-        commercialHeating: formState.commercialHeating,
-        name: formState.name,
-        email: formState.email,
-        phone: formState.phone
-      };
-
   });
+  document.getElementById('btn-equipment-next').addEventListener('click', () => {
+    showSection('section-final');
+  });
+  document.getElementById('btn-back-7-dum-equipment').addEventListener('click', () => {
+    showSection('section6-dum-plot');
+  });
+
+  // POZEMEK steps logic
+  setupOptionButtons('#section2-pozemek .options-grid-small', 'plotSize', (val) => {
+    formState.plotSize = val;
+    enableButton('#btn-plot-next');
+  });
+  document.getElementById('btn-plot-next').addEventListener('click', () => {
+    showSection('section3-pozemek');
+  });
+  document.getElementById('btn-back-2-pozemek').addEventListener('click', () => {
+    showSection('section1');
+  });
+
+  setupOptionButtons('#section3-pozemek .options-grid-small', 'plotType', (val) => {
+    formState.plotType = val;
+    enableButton('#btn-plot-type-next');
+  });
+  document.getElementById('btn-plot-type-next').addEventListener('click', () => {
+    showSection('section4-pozemek');
+  });
+  document.getElementById('btn-back-3-pozemek').addEventListener('click', () => {
+    showSection('section2-pozemek');
+  });
+
+  setupOptionButtons('#section4-pozemek .options-grid-small', 'plotAccess', (val) => {
+    formState.plotAccess = val;
+    enableButton('#btn-plot-access-next');
+  });
+  document.getElementById('btn-plot-access-next').addEventListener('click', () => {
+    showSection('section-final');
+  });
+  document.getElementById('btn-back-4-pozemek').addEventListener('click', () => {
+    showSection('section3-pozemek');
+  });
+
+  // KOMERČNÍ steps logic
+  setupOptionButtons('#section2-komercni .options-grid-small', 'commercialType', (val) => {
+    formState.commercialType = val;
+    enableButton('#btn-commercial-type-next');
+  });
+  document.getElementById('btn-commercial-type-next').addEventListener('click', () => {
+    showSection('section3-komercni');
+  });
+  document.getElementById('btn-back-2-komercni').addEventListener('click', () => {
+    showSection('section1');
+  });
+
+  setupOptionButtons('#section3-komercni .options-grid-small', 'commercialArea', (val) => {
+    formState.commercialArea = val;
+    enableButton('#btn-commercial-area-next');
+  });
+  document.getElementById('btn-commercial-area-next').addEventListener('click', () => {
+    showSection('section4-komercni');
+  });
+  document.getElementById('btn-back-3-komercni').addEventListener('click', () => {
+    showSection('section2-komercni');
+  });
+
+  setupOptionButtons('#section4-komercni .options-grid-small', 'commercialCondition', (val) => {
+    formState.commercialCondition = val;
+    enableButton('#btn-commercial-condition-next');
+  });
+  document.getElementById('btn-commercial-condition-next').addEventListener('click', () => {
+    showSection('section5-komercni-heating');
+  });
+  document.getElementById('btn-back-4-komercni').addEventListener('click', () => {
+    showSection('section3-komercni');
+  });
+
+  setupOptionButtons('#section5-komercni-heating .options-grid-small', 'commercialHeating', (val) => {
+    formState.commercialHeating = val;
+    enableButton('#btn-commercial-heating-next');
+  });
+  document.getElementById('btn-commercial-heating-next').addEventListener('click', () => {
+    showSection('section-final');
+  });
+  document.getElementById('btn-back-5-komercni-heating').addEventListener('click', () => {
+    showSection('section4-komercni');
+  });
+
+  // Kontaktni udaje
+  const inputName = document.getElementById('input-name');
+  const inputEmail = document.getElementById('input-email');
+  const inputPhone = document.getElementById('input-phone');
+  const btnSubmit = document.getElementById('btn-submit');
+
+  function validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+  function validateName(name) {
+    return name.trim().length > 1;
+  }
+  function updateSubmitButton() {
+    const valid = validateName(inputName.value) && validateEmail(inputEmail.value);
+    btnSubmit.disabled = !valid;
+  }
+
+  inputName.addEventListener('input', () => {
+    formState.name = inputName.value.trim();
+    updateSubmitButton();
+  });
+  inputEmail.addEventListener('input', () => {
+    formState.email = inputEmail.value.trim();
+    updateSubmitButton();
+  });
+  inputPhone.addEventListener('input', () => {
+    formState.phone = inputPhone.value.trim();
+  });
+
+  btnSubmit.addEventListener('click', () => {
+    btnSubmit.disabled = true;
+    btnSubmit.textContent = 'Odesílám...';
+
+    // Prepare data object to send
+    const dataToSend = {
+      propertyType: formState.propertyType,
+
+      flatSize: formState.flatSize,
+      flatCondition: formState.flatCondition,
+      heating: formState.heating,
+      balconyCondition: formState.balconyCondition,
+      floorType: formState.floorType,
+
+      houseSize: formState.houseSize,
+      houseType: formState.houseType,
+      houseCondition: formState.houseCondition,
+      houseHeating: formState.houseHeating,
+      plotSizeHouse: formState.plotSizeHouse,
+      houseEquipment: formState.houseEquipment,
+
+      plotSize: formState.plotSize,
+      plotType: formState.plotType,
+      plotAccess: formState.plotAccess,
+
+      commercialType: formState.commercialType,
+      commercialArea: formState.commercialArea,
+      commercialCondition: formState.commercialCondition,
+      commercialHeating: formState.commercialHeating,
+
+      name: formState.name,
+      email: formState.email,
+      phone: formState.phone
+    };
+
+    // Replace YOUR_WEBHOOK_URL with actual URL
+    fetch('https://hook.eu2.make.com/9g6oxh7lneur6zismbvssdjihla472uk', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(dataToSend)
+    })
+    .then(response => {
+      if(!response.ok) {
+        throw new Error('Chyba při odesílání dat');
+      }
+      return response.json();
+    })
+    .then(data => {
+      showSection('success-message');
+    })
+    .catch(error => {
+      alert('Odeslání se nezdařilo, zkuste to prosím znovu.');
+      btnSubmit.disabled = false;
+      btnSubmit.textContent = 'Odeslat';
+      console.error(error);
+    });
+  });
+
 </script>
 </body>
 </html>
