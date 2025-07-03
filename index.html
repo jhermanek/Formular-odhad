@@ -1328,32 +1328,6 @@
         phone: formState.phone
       };
 
-      try {
-        // Zde vlož svůj skutečný webhook z Make.com
-        const webhookURL = 'https://hook.eu2.make.com/9g6oxh7lneur6zismbvssdjihla472uk'; // 
-
-        const response = await fetch(webhookURL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(dataToSend)
-        });
-
-        if (response.ok) {
-          showSection('success-message');
-        } else {
-          alert('Odeslání selhalo, zkuste to prosím znovu.');
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'Odeslat';
-        }
-      } catch (error) {
-        alert('Nastala chyba při odesílání: ' + error.message);
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Odeslat';
-      }
-    });
-
   });
 </script>
 </body>
