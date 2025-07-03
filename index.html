@@ -1,83 +1,1310 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ocenění nemovitosti zdarma</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-  <style>
-    body {
-      background: url('https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1600&q=80') no-repeat center center fixed;
-      background-size: cover;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Interaktivní dotazník ocenění nemovitosti</title>
+<style>
+  body {
+    background: #f0fdfa;
+    font-family: 'Poppins', sans-serif;
+    color: #276749;
+    margin: 0;
+  }
+  .form-wrapper {
+    max-width: 700px;
+    margin: 40px auto 80px auto;
+    background: white;
+    padding: 50px 40px;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(16, 185, 129, 0.3);
+    text-align: center;
+    position: relative;
+  }
+  h1, h2 {
+    font-weight: 700;
+    color: #047857;
+    margin: 0 0 20px 0;
+  }
+  h1 {
+    font-size: 2.8rem;
+    animation: gentleWave 5s ease-in-out infinite;
+  }
+  h2 {
+    font-size: 2rem;
+  }
+  p.description {
+    font-style: italic;
+    color: #4a5568;
+    margin-bottom: 40px;
+    font-size: 1.2rem;
+  }
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px 50px;
+    justify-items: center;
+    margin-bottom: 40px;
+  }
+  .option-btn {
+    background: #d1fae5;
+    border: 2px solid #34d399;
+    border-radius: 20px;
+    padding: 60px 32px 70px 32px;
+    font-weight: 700;
+    color: #065f46;
+    width: 260px;
+    cursor: pointer;
+    box-shadow: 0 10px 22px rgba(52, 211, 153, 0.35);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    user-select: none;
+    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 0.4s forwards;
+  }
+  .option-btn:nth-child(1) { animation-delay: 0.1s; }
+  .option-btn:nth-child(2) { animation-delay: 0.3s; }
+  .option-btn:nth-child(3) { animation-delay: 0.5s; }
+  .option-btn:nth-child(4) { animation-delay: 0.7s; }
+  .option-btn:hover {
+    background: #34d399;
+    color: white;
+    transform: translateY(-6px) scale(1.07);
+    box-shadow: 0 15px 40px rgba(52, 211, 153, 0.6);
+  }
+  .option-btn .icon {
+    font-size: 5rem;
+    margin-bottom: 30px;
+    animation: pulseSoft 3.5s ease-in-out infinite;
+    line-height: 1.2;
+  }
+  .option-btn .text {
+    font-size: 1.6rem;
+    line-height: 1.2;
+    word-wrap: break-word;
+    white-space: normal;
+  }
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
-    .hidden { display: none; }
-    .progress-bar { height: 8px; background-color: #2d3748; border-radius: 9999px; }
-    .progress-fill { height: 100%; background-color: #48bb78; border-radius: 9999px; transition: width 0.3s ease-in-out; }
-    .fade-enter { opacity: 0; transform: translateY(20px); }
-    .fade-enter-active { opacity: 1; transform: translateY(0); transition: opacity 0.4s ease-out, transform 0.4s ease-out; }
-    .centered-container { max-width: 800px; margin: 0 auto; padding: 2rem; background-color: rgba(0, 0, 0, 0.75); border-radius: 1rem; }
-  </style>
+  }
+  @keyframes pulseSoft {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  @keyframes gentleWave {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(1.2deg); }
+  }
+
+  /* Additional styling for questions */
+  .question-section {
+    display: none;
+    text-align: center;
+  }
+  .question-section.active {
+    display: block;
+    animation: fadeInUp 0.4s forwards;
+  }
+  .options-grid-small {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px 30px;
+    justify-items: center;
+    margin-bottom: 40px;
+  }
+  .option-btn-small {
+    background: #e0f2f1;
+    border: 2px solid #4db6ac;
+    border-radius: 15px;
+    padding: 35px 25px 45px 25px;
+    font-weight: 600;
+    color: #00695c;
+    width: 160px;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(77, 182, 172, 0.35);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    user-select: none;
+    transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    text-align: center;
+  }
+  .option-btn-small:hover {
+    background: #4db6ac;
+    color: white;
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 12px 28px rgba(77, 182, 172, 0.65);
+  }
+  .option-btn-small.selected {
+    background: #00796b;
+    color: white;
+    border-color: #00796b;
+  }
+  .option-btn-small .icon {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    animation: pulseSoft 3.5s ease-in-out infinite;
+    line-height: 1.2;
+  }
+  .option-btn-small .text {
+    font-size: 1rem;
+    line-height: 1.2;
+  }
+  .next-btn {
+    background: #047857;
+    color: white;
+    padding: 16px 50px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 1.3rem;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 10px 25px rgba(4, 120, 87, 0.5);
+    transition: background 0.3s ease;
+    margin-top: 10px;
+  }
+  .next-btn:disabled {
+    background: #a7c9b4;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  .next-btn:hover:not(:disabled) {
+    background: #065f46;
+  }
+  .checkbox-group {
+    margin-bottom: 40px;
+    text-align: left;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .checkbox-group label {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 600;
+    color: #00695c;
+    margin-bottom: 8px;
+  }
+  .checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
+    accent-color: #047857;
+    cursor: pointer;
+  }
+
+  /* Contact form inputs */
+  .contact-input {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px 16px;
+    margin: 8px auto 20px auto;
+    border-radius: 10px;
+    border: 2px solid #34d399;
+    font-size: 1.1rem;
+    color: #065f46;
+    background-color: #d1fae5;
+    transition: border-color 0.3s ease;
+  }
+  .contact-input:focus {
+    outline: none;
+    border-color: #047857;
+    background-color: #b7f0cd;
+  }
+
+  /* Progress bar */
+  .progress-container {
+    height: 22px;
+    background: #d1fae5;
+    border-radius: 20px;
+    margin-bottom: 30px;
+    position: relative;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #34d399, #f87171);
+    border-radius: 20px;
+    transition: width 0.6s ease;
+  }
+  .progress-text {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    font-weight: 700;
+    color: #065f46;
+    font-size: 1rem;
+    text-shadow: 0 0 2px rgba(255,255,255,0.6);
+  }
+
+  /* Button group for navigation */
+  .btn-group {
+    display: flex;
+    justify-content: space-between;
+    max-width: 420px;
+    margin: 0 auto 40px auto;
+  }
+  .btn-group button {
+    background: #047857;
+    border-radius: 30px;
+    color: white;
+    border: none;
+    padding: 14px 40px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 10px 25px rgba(4, 120, 87, 0.5);
+    transition: background 0.3s ease;
+    min-width: 140px;
+  }
+  .btn-group button:disabled {
+    background: #a7c9b4;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  .btn-group button:hover:not(:disabled) {
+    background: #065f46;
+  }
+
+  /* Final fireworks */
+  .fireworks-container {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 9999;
+  }
+  .congrats-message {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #16a34a;
+    text-shadow: 0 0 12px #34d399, 0 0 20px #bbf7d0;
+    margin-bottom: 20px;
+    animation: glow 2.5s ease-in-out infinite;
+  }
+  @keyframes glow {
+    0%, 100% { text-shadow: 0 0 12px #34d399, 0 0 20px #bbf7d0; }
+    50% { text-shadow: 0 0 22px #22c55e, 0 0 30px #bbf7d0; }
+  }
+
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .form-wrapper {
+      width: 90vw;
+      padding: 30px 20px 40px 20px;
+      margin: 20px auto 60px auto;
+    }
+    h1 {
+      font-size: 1.8rem;
+    }
+    h2 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+    }
+    p.description {
+      font-size: 1rem;
+      margin-bottom: 30px;
+    }
+    .options-grid {
+      grid-template-columns: 1fr !important;
+      gap: 25px 0;
+    }
+    .option-btn {
+      width: 100% !important;
+      font-size: 1.3rem !important;
+      padding: 45px 20px 55px 20px !important;
+    }
+    .option-btn .icon {
+      font-size: 4rem !important;
+    }
+    .options-grid-small {
+      grid-template-columns: 1fr !important;
+      gap: 18px 0;
+    }
+    .option-btn-small {
+      width: 100% !important;
+      font-size: 1.1rem !important;
+      padding: 25px 18px 35px 18px !important;
+    }
+    .option-btn-small .icon {
+      font-size: 3rem !important;
+    }
+    .btn-group {
+      flex-direction: column;
+      gap: 18px;
+      max-width: 90vw;
+      margin: 0 auto 40px auto;
+    }
+    .btn-group button {
+      width: 100%;
+      font-size: 1.1rem;
+      padding: 14px 0;
+      min-width: unset;
+    }
+    .contact-input {
+      font-size: 1rem !important;
+      padding: 12px 16px !important;
+    }
+    .progress-container {
+      height: 14px;
+      margin-bottom: 30px;
+    }
+    .progress-text {
+      font-size: 0.85rem;
+      top: 12px;
+      right: 10px;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .option-btn .text {
+      font-size: 1.4rem;
+    }
+    .option-btn-small .text {
+      font-size: 1rem;
+    }
+  }
+</style>
 </head>
-<body class="text-white">
-  <div id="intro-screen" class="centered-container text-center">
-    <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Logo domek" class="w-20 mx-auto mb-4">
-    <h1 class="text-4xl font-bold text-green-400 mb-4">Získejte zdarma odhad ceny Vaší nemovitosti</h1>
-    <p class="mb-6 text-lg">Stačí odpovědět na pár jednoduchých otázek. Výsledek Vám pošleme do 24 hodin.</p>
-    <button onclick="startIntro()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Začít</button>
+<body>
+<div class="form-wrapper">
+
+  <div class="progress-container" aria-label="Průběh dotazníku">
+    <div class="progress-bar" id="progress-bar"></div>
+    <div class="progress-text" id="progress-text">0%</div>
   </div>
 
-  <div id="main-form" class="hidden">
-    <div class="max-w-2xl mx-auto py-10 px-4 bg-gray-900 rounded-lg">
-      <h2 class="text-3xl font-bold text-center text-green-400 mb-6">Zjistěte za kolik se dá prodat Vaše nemovitost</h2>
-      <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-        <div class="mb-4">
-          <div class="flex justify-between text-sm mb-1">
-            <span id="progress-text">Krok 1 z 7</span>
-            <span id="progress-percentage">14%</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill" id="progress-fill" style="width: 14%"></div>
-          </div>
-        </div>
-        <div id="form-content" class="transition-all"></div>
-        <button id="back-button" onclick="goBack()" class="mt-4 bg-gray-600 text-white px-4 py-2 rounded hidden">Zpět</button>
+  <!-- Section 1: Vyber typu nemovitosti -->
+  <div id="section1" class="question-section active" role="region" aria-labelledby="section1-header">
+    <h1 id="section1-header">Jakou nemovitost chcete ocenit?</h1>
+    <p class="description">Ocenění dostanete do 24 hodin zcela zdarma! Vyberte typ a zjistěte, kolik stojí váš kousek ráje! 🏡💚</p>
+    <div class="options-grid">
+      <div class="option-btn" data-type="byt" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🏢</div>
+        <div class="text">Byt</div>
+      </div>
+      <div class="option-btn" data-type="dum" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🏡</div>
+        <div class="text">Rodinný dům</div>
+      </div>
+      <div class="option-btn" data-type="pozemek" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🌳</div>
+        <div class="text">Pozemek</div>
+      </div>
+      <div class="option-btn" data-type="komercni" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🏪</div>
+        <div class="text">Komerční</div>
       </div>
     </div>
   </div>
 
-  <canvas id="confetti-canvas" class="hidden fixed top-0 left-0 w-full h-full pointer-events-none z-50"></canvas>
-  <audio id="confetti-sound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_d76c3f7497.mp3"></audio>
+  <!-- BYT SECTIONS -->
 
-  <script>
-    emailjs.init("rRhQMHwrq3pvInTTE"); // PUBLIC KEY
+  <!-- Section 2: Byt - Velikost -->
+  <div id="section2-byt" class="question-section" role="region" aria-labelledby="section2-header">
+    <h2 id="section2-header">Jaká je velikost bytu?</h2>
+    <div class="options-grid-small" role="list">
+      <div class="option-btn-small" data-name="flat-size" data-value="do 30 m²" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">📏</div>
+        <div class="text">do 30 m²</div>
+      </div>
+      <div class="option-btn-small" data-name="flat-size" data-value="30-50 m²" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">📏</div>
+        <div class="text">30-50 m²</div>
+      </div>
+      <div class="option-btn-small" data-name="flat-size" data-value="50-70 m²" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">📏</div>
+        <div class="text">50-70 m²</div>
+      </div>
+      <div class="option-btn-small" data-name="flat-size" data-value="70-90 m²" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">📏</div>
+        <div class="text">70-90 m²</div>
+      </div>
+      <div class="option-btn-small" data-name="flat-size" data-value="90-110 m²" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">📏</div>
+        <div class="text">90-110 m²</div>
+      </div>
+      <div class="option-btn-small" data-name="flat-size" data-value="110+ m²" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">📏</div>
+        <div class="text">110+ m²</div>
+      </div>
+    </div>
+    <div class="btn-group">
+      <button id="btn-back-2" type="button">Zpět</button>
+      <button id="btn-flat-size-next" class="next-btn" disabled type="button">Pokračovat</button>
+    </div>
+  </div>
 
-    async function submitForm() {
-      const email = document.getElementById('email').value;
-      const jmeno = document.getElementById('jmeno').value;
-      const telefon = document.getElementById('telefon').value;
-      const lokalita = document.getElementById('lokalita').value;
+  <!-- Section 3: Byt - Stav -->
+  <div id="section3-byt" class="question-section" role="region" aria-labelledby="section3-header">
+    <h2 id="section3-header">Jaký je stav bytu?</h2>
+    <div class="options-grid-small" role="list">
+      <div class="option-btn-small" data-name="flat-condition" data-value="Novostavba" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">✨</div>
+        <div class="text">Novostavba</div>
+      </div>
+      <div class="option-btn-small" data-name="flat-condition" data-value="Po rekonstrukci" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🔨</div>
+        <div class="text">Po rekonstrukci</div>
+      </div>
+      <div class="option-btn-small" data-name="flat-condition" data-value="Dobrý" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">👍</div>
+        <div class="text">Dobrý</div>
+      </div>
+      <div class="option-btn-small" data-name="flat-condition" data-value="K rekonstrukci" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🔧</div>
+        <div class="text">K rekonstrukci</div>
+      </div>
+    </div>
+    <div class="btn-group">
+      <button id="btn-back-3" type="button">Zpět</button>
+      <button id="btn-flat-condition-next" class="next-btn" disabled type="button">Pokračovat</button>
+    </div>
+  </div>
 
-      const templateParams = {
-        email,
-        jmeno,
-        telefon,
-        typ: selectedData.typ || '',
-        velikost: selectedData.velikost || '',
-        lokalita
-      };
+  <!-- Section 4: Byt - Typ vytápění -->
+  <div id="section4-heating" class="question-section" role="region" aria-labelledby="section4-heating-header">
+    <h2 id="section4-heating-header">Jaký typ vytápění má byt?</h2>
+    <div class="options-grid-small" role="list">
+      <div class="option-btn-small" data-name="heating" data-value="Ústřední topení" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🔥</div>
+        <div class="text">Ústřední topení</div>
+      </div>
+      <div class="option-btn-small" data-name="heating" data-value="Elektrické topení" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">⚡</div>
+        <div class="text">Elektrické topení</div>
+      </div>
+      <div class="option-btn-small" data-name="heating" data-value="Podlahové vytápění" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🌡️</div>
+        <div class="text">Podlahové vytápění</div>
+      </div>
+      <div class="option-btn-small" data-name="heating" data-value="Jiné" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">❓</div>
+        <div class="text">Jiné</div>
+      </div>
+    </div>
+    <div class="btn-group">
+      <button id="btn-back-4-heating" type="button">Zpět</button>
+      <button id="btn-heating-next" class="next-btn" disabled type="button">Pokračovat</button>
+    </div>
+  </div>
 
-      try {
-        const response = await emailjs.send("service_z9t6i66", "template_bkfywbh", templateParams);
-        console.log("EmailJS response:", response);
-        showCelebration();
-      } catch (error) {
-        alert("Nepodařilo se odeslat formulář. Zkuste to prosím znovu.");
-        console.error("EmailJS chyba:", error);
+  <!-- Section 5: Byt - Stav balkonu -->
+  <div id="section5-balcony" class="question-section" role="region" aria-labelledby="section5-balcony-header">
+    <h2 id="section5-balcony-header">Jaký je stav balkonu?</h2>
+    <div class="options-grid-small" role="list">
+      <div class="option-btn-small" data-name="balcony-condition" data-value="Nový" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">✨</div>
+        <div class="text">Nový</div>
+      </div>
+      <div class="option-btn-small" data-name="balcony-condition" data-value="Po rekonstrukci" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🔨</div>
+        <div class="text">Po rekonstrukci</div>
+      </div>
+      <div class="option-btn-small" data-name="balcony-condition" data-value="Dobrý" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">👍</div>
+        <div class="text">Dobrý</div>
+      </div>
+      <div class="option-btn-small" data-name="balcony-condition" data-value="K rekonstrukci" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🔧</div>
+        <div class="text">K rekonstrukci</div>
+      </div>
+      <div class="option-btn-small" data-name="balcony-condition" data-value="Bez balkonu" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🚫</div>
+        <div class="text">Bez balkonu</div>
+      </div>
+    </div>
+    <div class="btn-group">
+      <button id="btn-back-5-balcony" type="button">Zpět</button>
+      <button id="btn-balcony-next" class="next-btn" disabled type="button">Pokračovat</button>
+    </div>
+  </div>
+
+  <!-- Section 6: Byt - Typ podlahy -->
+  <div id="section6-floor" class="question-section" role="region" aria-labelledby="section6-floor-header">
+    <h2 id="section6-floor-header">Jaký typ podlahy je v bytě?</h2>
+    <div class="options-grid-small" role="list">
+      <div class="option-btn-small" data-name="floor-type" data-value="Dřevo" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🪵</div>
+        <div class="text">Dřevo</div>
+      </div>
+      <div class="option-btn-small" data-name="floor-type" data-value="Laminát" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🧱</div>
+        <div class="text">Laminát</div>
+      </div>
+      <div class="option-btn-small" data-name="floor-type" data-value="Koberec" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🧶</div>
+        <div class="text">Koberec</div>
+      </div>
+      <div class="option-btn-small" data-name="floor-type" data-value="Keramika" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🧱</div>
+        <div class="text">Keramika</div>
+      </div>
+      <div class="option-btn-small" data-name="floor-type" data-value="Jiné" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">❓</div>
+        <div class="text">Jiné</div>
+      </div>
+    </div>
+    <div class="btn-group">
+      <button id="btn-back-6-floor" type="button">Zpět</button>
+      <button id="btn-floor-next" class="next-btn" disabled type="button">Pokračovat</button>
+    </div>
+  </div>
+
+  <!-- RODINNÝ DŮM SECTIONS -->
+
+  <!-- Section 2-dum: Velikost domu -->
+  <div id="section2-dum" class="question-section" role="region" aria-labelledby="section2-dum-header">
+    <h2 id="section2-dum-header">Jaká je velikost domu (v m²)?</h2>
+    <div class="options-grid-small" role="list">
+      <div class="option-btn-small" data-name="house-size" data-value="do 80 m²" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">📏</div>
+        <div class="text">do 80 m²</div>
+      </div>
+      <div class="option-btn-small" data-name="house-size" data-value="80-120 m²" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">📏</div>
+        <div class="text">80-120 m²</div>
+      </div>
+      <div class="option-btn-small" data-name="house-size" data-value="120-160 m²" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">📏</div>
+        <div class="text">120-160 m²</div>
+      </div>
+      <div class="option-btn-small" data-name="house-size" data-value="160-200 m²" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">📏</div>
+        <div class="text">160-200 m²</div>
+      </div>
+      <div class="option-btn-small" data-name="house-size" data-value="200+ m²" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">📏</div>
+        <div class="text">200+ m²</div>
+      </div>
+    </div>
+    <div class="btn-group">
+      <button id="btn-back-2-dum" type="button">Zpět</button>
+      <button id="btn-house-size-next" class="next-btn" disabled type="button">Pokračovat</button>
+    </div>
+  </div>
+
+  <!-- Section 3-dum: Typ domu -->
+  <div id="section3-dum" class="question-section" role="region" aria-labelledby="section3-dum-header">
+    <h2 id="section3-dum-header">Jaký typ domu máte?</h2>
+    <div class="options-grid-small" role="list">
+      <div class="option-btn-small" data-name="house-type" data-value="Řadový" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🏘️</div>
+        <div class="text">Řadový</div>
+      </div>
+      <div class="option-btn-small" data-name="house-type" data-value="Samostatný" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🏠</div>
+        <div class="text">Samostatný</div>
+      </div>
+      <div class="option-btn-small" data-name="house-type" data-value="Patrový" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🏡</div>
+        <div class="text">Patrový</div>
+      </div>
+      <div class="option-btn-small" data-name="house-type" data-value="Bungalov" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🏚️</div>
+        <div class="text">Bungalov</div>
+      </div>
+    </div>
+    <div class="btn-group">
+      <button id="btn-back-3-dum" type="button">Zpět</button>
+      <button id="btn-house-type-next" class="next-btn" disabled type="button">Pokračovat</button>
+    </div>
+  </div>
+
+  <!-- Section 4-dum: Stav domu -->
+  <div id="section4-dum" class="question-section" role="region" aria-labelledby="section4-dum-header">
+    <h2 id="section4-dum-header">Jaký je stav domu?</h2>
+    <div class="options-grid-small" role="list">
+      <div class="option-btn-small" data-name="house-condition" data-value="Novostavba" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">✨</div>
+        <div class="text">Novostavba</div>
+      </div>
+      <div class="option-btn-small" data-name="house-condition" data-value="Po rekonstrukci" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🔨</div>
+        <div class="text">Po rekonstrukci</div>
+      </div>
+      <div class="option-btn-small" data-name="house-condition" data-value="Dobrý" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">👍</div>
+        <div class="text">Dobrý</div>
+      </div>
+      <div class="option-btn-small" data-name="house-condition" data-value="K rekonstrukci" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🔧</div>
+        <div class="text">K rekonstrukci</div>
+      </div>
+    </div>
+    <div class="btn-group">
+      <button id="btn-back-4-dum" type="button">Zpět</button>
+      <button id="btn-house-condition-next" class="next-btn" disabled type="button">Pokračovat</button>
+    </div>
+  </div>
+
+  <!-- Section 5-dum: Typ vytápění -->
+  <div id="section5-dum-heating" class="question-section" role="region" aria-labelledby="section5-dum-heating-header">
+    <h2 id="section5-dum-heating-header">Jaký typ vytápění má dům?</h2>
+    <div class="options-grid-small" role="list">
+      <div class="option-btn-small" data-name="house-heating" data-value="Ústřední topení" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🔥</div>
+        <div class="text">Ústřední topení</div>
+      </div>
+      <div class="option-btn-small" data-name="house-heating" data-value="Elektrické topení" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">⚡</div>
+        <div class="text">Elektrické topení</div>
+      </div>
+      <div class="option-btn-small" data-name="house-heating" data-value="Podlahové vytápění" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🌡️</div>
+        <div class="text">Podlahové vytápění</div>
+      </div>
+      <div class="option-btn-small" data-name="house-heating" data-value="Jiné" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">❓</div>
+        <div class="text">Jiné</div>
+      </div>
+    </div>
+    <div class="btn-group">
+      <button id="btn-back-5-dum-heating" type="button">Zpět</button>
+      <button id="btn-house-heating-next" class="next-btn" disabled type="button">Pokračovat</button>
+    </div>
+  </div>
+
+  <!-- Section 6-dum: Velikost pozemku -->
+  <div id="section6-dum-plot" class="question-section" role="region" aria-labelledby="section6-dum-plot-header">
+    <h2 id="section6-dum-plot-header">Jak velký je pozemek?</h2>
+    <div class="options-grid-small" role="list">
+      <div class="option-btn-small" data-name="plot-size" data-value="do 200 m²" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🌳</div>
+        <div class="text">do 200 m²</div>
+      </div>
+      <div class="option-btn-small" data-name="plot-size" data-value="200-500 m²" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🌳</div>
+        <div class="text">200-500 m²</div>
+      </div>
+      <div class="option-btn-small" data-name="plot-size" data-value="500-1000 m²" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🌳</div>
+        <div class="text">500-1000 m²</div>
+      </div>
+      <div class="option-btn-small" data-name="plot-size" data-value="1000+ m²" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🌳</div>
+        <div class="text">1000+ m²</div>
+      </div>
+    </div>
+    <div class="btn-group">
+      <button id="btn-back-6-dum-plot" type="button">Zpět</button>
+      <button id="btn-plot-size-next" class="next-btn" disabled type="button">Pokračovat</button>
+    </div>
+  </div>
+
+  <!-- Section 7-dum: Vybavení domu -->
+  <div id="section7-dum-equipment" class="question-section" role="region" aria-labelledby="section7-dum-equipment-header">
+    <h2 id="section7-dum-equipment-header">Jaké má dům vybavení?</h2>
+    <div class="checkbox-group">
+      <label><input type="checkbox" data-name="house-equipment" data-value="Garáž" /> Garáž</label><br/>
+      <label><input type="checkbox" data-name="house-equipment" data-value="Bazén" /> Bazén</label><br/>
+      <label><input type="checkbox" data-name="house-equipment" data-value="Sklep" /> Sklep</label><br/>
+      <label><input type="checkbox" data-name="house-equipment" data-value="Terasa" /> Terasa</label><br/>
+      <label><input type="checkbox" data-name="house-equipment" data-value="Krb" /> Krb</label><br/>
+    </div>
+    <div class="btn-group">
+      <button id="btn-back-7-dum-equipment" type="button">Zpět</button>
+      <button id="btn-equipment-next" class="next-btn" type="button">Pokračovat</button>
+    </div>
+  </div>
+
+  <!-- COMMON SECTIONS (společné pro obě nemovitosti) -->
+
+  <!-- Section 7 or 8: Důvod ocenění -->
+  <div id="section7-reason" class="question-section" role="region" aria-labelledby="section7-reason-header">
+    <h2 id="section7-reason-header">Proč chcete nemovitost ocenit?</h2>
+    <p class="description">Zajímá nás důvod, proč se ptáte – ať už dědictví nebo plánujete prodat...</p>
+    <div class="options-grid-small" role="list">
+      <div class="option-btn-small" data-name="reason" data-value="Dědictví" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">👪</div>
+        <div class="text">Dědictví</div>
+      </div>
+      <div class="option-btn-small" data-name="reason" data-value="Prodej" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">💰</div>
+        <div class="text">Prodej</div>
+      </div>
+      <div class="option-btn-small" data-name="reason" data-value="Pro zajímavost" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🤔</div>
+        <div class="text">Jen ze zajímavosti</div>
+      </div>
+    </div>
+    <div class="btn-group">
+      <button id="btn-back-7-reason" type="button">Zpět</button>
+      <button id="btn-reason-next" class="next-btn" disabled type="button">Pokračovat</button>
+    </div>
+  </div>
+
+  <!-- Section 8: Prodej - termín -->
+  <div id="section8-sale-term" class="question-section" role="region" aria-labelledby="section8-sale-header">
+    <h2 id="section8-sale-header">Do kdy chcete prodat?</h2>
+    <p class="description">Vyberte, jak moc to spěchá – žádáme o vaše priority 😉</p>
+    <div class="options-grid-small" role="list">
+      <div class="option-btn-small" data-name="sale-term" data-value="Ihned" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">⚡</div>
+        <div class="text">Ihned</div>
+      </div>
+      <div class="option-btn-small" data-name="sale-term" data-value="Do 3 měsíců" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">📅</div>
+        <div class="text">Do 3 měsíců</div>
+      </div>
+      <div class="option-btn-small" data-name="sale-term" data-value="Do 6 měsíců" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">⏳</div>
+        <div class="text">Do 6 měsíců</div>
+      </div>
+      <div class="option-btn-small" data-name="sale-term" data-value="Nespěchám" tabindex="0" role="button" aria-pressed="false">
+        <div class="icon" aria-hidden="true">🐢</div>
+        <div class="text">Nespěchám</div>
+      </div>
+    </div>
+    <div class="btn-group">
+      <button id="btn-back-8-sale" type="button">Zpět</button>
+      <button id="btn-sale-term-next" class="next-btn" disabled type="button">Pokračovat</button>
+    </div>
+  </div>
+
+  <!-- Section 9: Lokalita nemovitosti -->
+  <div id="section9-location" class="question-section" role="region" aria-labelledby="section9-location-header">
+    <h2 id="section9-location-header">Kde se nemovitost nachází?</h2>
+    <p class="description">Město, obec nebo oblast, kde se vaše nemovitost nachází</p>
+    <input type="text" id="input-location" class="contact-input" placeholder="Např. Praha, Brno, Ostrava" aria-label="Lokalita nemovitosti" />
+    <div class="btn-group">
+      <button id="btn-back-9-location" type="button">Zpět</button>
+      <button id="btn-location-next" class="next-btn" disabled type="button">Pokračovat</button>
+    </div>
+  </div>
+
+  <!-- Section 10: Další informace -->
+  <div id="section10-info" class="question-section" role="region" aria-labelledby="section10-info-header">
+    <h2 id="section10-info-header">Co byste nám ještě chtěli říct?</h2>
+    <p class="description">Pomůže nám to připravit co nejpřesnější odhad 😊</p>
+    <textarea id="input-extra" class="contact-input" rows="4" placeholder="Napište nám něco o nemovitosti..." aria-label="Další informace o nemovitosti"></textarea>
+    <div class="btn-group">
+      <button id="btn-back-10-info" type="button">Zpět</button>
+      <button id="btn-info-next" class="next-btn" type="button">Pokračovat</button>
+    </div>
+  </div>
+
+  <!-- Section 11: Kontaktní údaje -->
+  <div id="section11-contact" class="question-section" role="region" aria-labelledby="section11-contact-header">
+    <h2 id="section11-contact-header">Vaše kontaktní údaje</h2>
+    <p class="description">Potřebujeme vás kontaktovat s oceněním nemovitosti</p>
+    <input type="text" id="input-name" class="contact-input" placeholder="Jméno a příjmení" aria-label="Jméno a příjmení" />
+    <input type="email" id="input-email" class="contact-input" placeholder="E-mail" aria-label="E-mail" />
+    <input type="tel" id="input-phone" class="contact-input" placeholder="Telefon" aria-label="Telefon" />
+    <div class="checkbox-group">
+      <label><input type="checkbox" id="input-consent" aria-required="true" /> Souhlasím se zpracováním osobních údajů pro účely ocenění nemovitosti (podle legislativy GDPR)</label>
+    </div>
+    <div class="btn-group">
+      <button id="btn-back-11-contact" type="button">Zpět</button>
+      <button id="btn-submit" class="next-btn" disabled type="button">Odeslat žádost</button>
+    </div>
+  </div>
+
+  <!-- Section 12: Shrnutí a poděkování -->
+  <div id="section12-thanks" class="question-section" role="region" aria-labelledby="section12-thanks-header">
+    <div class="congrats-message" id="congrats-message">🎉 Gratulujeme! 🎉</div>
+    <h2 id="section12-thanks-header">Ocenění bude zpracováno co nejdříve</h2>
+    <p class="description">Děkujeme za vyplnění dotazníku. Brzy vás kontaktujeme s přesným odhadem vaší nemovitosti.</p>
+    <button id="btn-restart" class="next-btn">Začít znovu</button>
+  </div>
+
+</div>
+
+<div class="fireworks-container" id="fireworks-container"></div>
+
+<script>
+  (function() {
+    const sections = {
+      'section1': document.getElementById('section1'),
+
+      // Byt
+      'section2-byt': document.getElementById('section2-byt'),
+      'section3-byt': document.getElementById('section3-byt'),
+      'section4-heating': document.getElementById('section4-heating'),
+      'section5-balcony': document.getElementById('section5-balcony'),
+      'section6-floor': document.getElementById('section6-floor'),
+
+      // Dům
+      'section2-dum': document.getElementById('section2-dum'),
+      'section3-dum': document.getElementById('section3-dum'),
+      'section4-dum': document.getElementById('section4-dum'),
+      'section5-dum-heating': document.getElementById('section5-dum-heating'),
+      'section6-dum-plot': document.getElementById('section6-dum-plot'),
+      'section7-dum-equipment': document.getElementById('section7-dum-equipment'),
+
+      // Společné
+      'section7-reason': document.getElementById('section7-reason'),
+      'section8-sale-term': document.getElementById('section8-sale-term'),
+      'section9-location': document.getElementById('section9-location'),
+      'section10-info': document.getElementById('section10-info'),
+      'section11-contact': document.getElementById('section11-contact'),
+      'section12-thanks': document.getElementById('section12-thanks')
+    };
+
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+
+    // Dynamický počet kroků dle typu nemovitosti
+    const stepsByType = {
+      byt: [
+        'section1', 'section2-byt', 'section3-byt', 'section4-heating', 'section5-balcony', 'section6-floor',
+        'section7-reason', 'section8-sale-term', 'section9-location', 'section10-info', 'section11-contact', 'section12-thanks'
+      ],
+      dum: [
+        'section1', 'section2-dum', 'section3-dum', 'section4-dum', 'section5-dum-heating', 'section6-dum-plot', 'section7-dum-equipment',
+        'section7-reason', 'section8-sale-term', 'section9-location', 'section10-info', 'section11-contact', 'section12-thanks'
+      ]
+    };
+
+    let currentStepIndex = 0;
+    let currentSteps = stepsByType.byt; // default byt
+    const answers = {};
+    let selectedType = null;
+    let reasonIsProdej = false;
+
+    function showSection(id) {
+      for (const key in sections) {
+        sections[key].classList.remove('active');
+      }
+      sections[id].classList.add('active');
+      updateProgress();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updateProgress() {
+      let progressPercent = Math.round(((currentStepIndex + 1) / currentSteps.length) * 100);
+      progressBar.style.width = progressPercent + '%';
+      let green = Math.floor(52 + (203 * (1 - (currentStepIndex + 1) / currentSteps.length)));
+      let red = Math.floor(135 + (120 * ((currentStepIndex + 1) / currentSteps.length)));
+      progressBar.style.background = `linear-gradient(90deg, rgb(52,211,153), rgb(${red},${green},113))`;
+      progressText.textContent = progressPercent + '%';
+    }
+
+    function goToStep(index) {
+      currentStepIndex = index;
+      showSection(currentSteps[currentStepIndex]);
+    }
+
+    // START - Výběr typu nemovitosti
+    document.querySelectorAll('#section1 .option-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectedType = btn.dataset.type;
+        answers['property-type'] = selectedType;
+        currentSteps = stepsByType[selectedType] || stepsByType.byt;
+        currentStepIndex = 1;
+        showSection(currentSteps[currentStepIndex]);
+      });
+    });
+
+    // --- BYT sekce ---
+
+    // Section 2 byt - velikost
+    let flatSizeSelected = null;
+    document.querySelectorAll('#section2-byt .option-btn-small').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#section2-byt .option-btn-small').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        flatSizeSelected = btn.dataset.value;
+        answers['flat-size'] = flatSizeSelected;
+        document.getElementById('btn-flat-size-next').disabled = false;
+      });
+    });
+    document.getElementById('btn-flat-size-next').addEventListener('click', () => {
+      if (flatSizeSelected) {
+        goToStep(currentStepIndex + 1);
+      }
+    });
+    document.getElementById('btn-back-2').addEventListener('click', () => {
+      goToStep(currentStepIndex - 1);
+    });
+
+    // Section 3 byt - stav
+    let flatConditionSelected = null;
+    document.querySelectorAll('#section3-byt .option-btn-small').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#section3-byt .option-btn-small').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        flatConditionSelected = btn.dataset.value;
+        answers['flat-condition'] = flatConditionSelected;
+        document.getElementById('btn-flat-condition-next').disabled = false;
+      });
+    });
+    document.getElementById('btn-flat-condition-next').addEventListener('click', () => {
+      if (flatConditionSelected) {
+        goToStep(currentStepIndex + 1);
+      }
+    });
+    document.getElementById('btn-back-3').addEventListener('click', () => {
+      goToStep(currentStepIndex - 1);
+    });
+
+    // Section 4 byt - topení
+    let heatingSelected = null;
+    document.querySelectorAll('#section4-heating .option-btn-small').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#section4-heating .option-btn-small').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        heatingSelected = btn.dataset.value;
+        answers['heating'] = heatingSelected;
+        document.getElementById('btn-heating-next').disabled = false;
+      });
+    });
+    document.getElementById('btn-heating-next').addEventListener('click', () => {
+      if (heatingSelected) {
+        goToStep(currentStepIndex + 1);
+      }
+    });
+    document.getElementById('btn-back-4-heating').addEventListener('click', () => {
+      goToStep(currentStepIndex - 1);
+    });
+
+    // Section 5 byt - balkon
+    let balconySelected = null;
+    document.querySelectorAll('#section5-balcony .option-btn-small').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#section5-balcony .option-btn-small').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        balconySelected = btn.dataset.value;
+        answers['balcony-condition'] = balconySelected;
+        document.getElementById('btn-balcony-next').disabled = false;
+      });
+    });
+    document.getElementById('btn-balcony-next').addEventListener('click', () => {
+      if (balconySelected) {
+        goToStep(currentStepIndex + 1);
+      }
+    });
+    document.getElementById('btn-back-5-balcony').addEventListener('click', () => {
+      goToStep(currentStepIndex - 1);
+    });
+
+    // Section 6 byt - podlaha
+    let floorSelected = null;
+    document.querySelectorAll('#section6-floor .option-btn-small').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#section6-floor .option-btn-small').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        floorSelected = btn.dataset.value;
+        answers['floor-type'] = floorSelected;
+        document.getElementById('btn-floor-next').disabled = false;
+      });
+    });
+    document.getElementById('btn-floor-next').addEventListener('click', () => {
+      if (floorSelected) {
+        goToStep(currentStepIndex + 1);
+      }
+    });
+    document.getElementById('btn-back-6-floor').addEventListener('click', () => {
+      goToStep(currentStepIndex - 1);
+    });
+
+    // --- DŮM sekce ---
+
+    // Section 2 dum - velikost domu
+    let houseSizeSelected = null;
+    document.querySelectorAll('#section2-dum .option-btn-small').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#section2-dum .option-btn-small').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        houseSizeSelected = btn.dataset.value;
+        answers['house-size'] = houseSizeSelected;
+        document.getElementById('btn-house-size-next').disabled = false;
+      });
+    });
+    document.getElementById('btn-house-size-next').addEventListener('click', () => {
+      if (houseSizeSelected) {
+        goToStep(currentStepIndex + 1);
+      }
+    });
+    document.getElementById('btn-back-2-dum').addEventListener('click', () => {
+      goToStep(currentStepIndex - 1);
+    });
+
+    // Section 3 dum - typ domu
+    let houseTypeSelected = null;
+    document.querySelectorAll('#section3-dum .option-btn-small').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#section3-dum .option-btn-small').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        houseTypeSelected = btn.dataset.value;
+        answers['house-type'] = houseTypeSelected;
+        document.getElementById('btn-house-type-next').disabled = false;
+      });
+    });
+    document.getElementById('btn-house-type-next').addEventListener('click', () => {
+      if (houseTypeSelected) {
+        goToStep(currentStepIndex + 1);
+      }
+    });
+    document.getElementById('btn-back-3-dum').addEventListener('click', () => {
+      goToStep(currentStepIndex - 1);
+    });
+
+    // Section 4 dum - stav domu
+    let houseConditionSelected = null;
+    document.querySelectorAll('#section4-dum .option-btn-small').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#section4-dum .option-btn-small').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        houseConditionSelected = btn.dataset.value;
+        answers['house-condition'] = houseConditionSelected;
+        document.getElementById('btn-house-condition-next').disabled = false;
+      });
+    });
+    document.getElementById('btn-house-condition-next').addEventListener('click', () => {
+      if (houseConditionSelected) {
+        goToStep(currentStepIndex + 1);
+      }
+    });
+    document.getElementById('btn-back-4-dum').addEventListener('click', () => {
+      goToStep(currentStepIndex - 1);
+    });
+
+    // Section 5 dum - topení
+    let houseHeatingSelected = null;
+    document.querySelectorAll('#section5-dum-heating .option-btn-small').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#section5-dum-heating .option-btn-small').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        houseHeatingSelected = btn.dataset.value;
+        answers['house-heating'] = houseHeatingSelected;
+        document.getElementById('btn-house-heating-next').disabled = false;
+      });
+    });
+    document.getElementById('btn-house-heating-next').addEventListener('click', () => {
+      if (houseHeatingSelected) {
+        goToStep(currentStepIndex + 1);
+      }
+    });
+    document.getElementById('btn-back-5-dum-heating').addEventListener('click', () => {
+      goToStep(currentStepIndex - 1);
+    });
+
+    // Section 6 dum - velikost pozemku
+    let plotSizeSelected = null;
+    document.querySelectorAll('#section6-dum-plot .option-btn-small').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#section6-dum-plot .option-btn-small').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        plotSizeSelected = btn.dataset.value;
+        answers['plot-size'] = plotSizeSelected;
+        document.getElementById('btn-plot-size-next').disabled = false;
+      });
+    });
+    document.getElementById('btn-plot-size-next').addEventListener('click', () => {
+      if (plotSizeSelected) {
+        goToStep(currentStepIndex + 1);
+      }
+    });
+    document.getElementById('btn-back-6-dum-plot').addEventListener('click', () => {
+      goToStep(currentStepIndex - 1);
+    });
+
+    // Section 7 dum - vybavení
+    document.getElementById('btn-equipment-next').addEventListener('click', () => {
+      // vybereme zaškrtlé vybavení
+      const checked = [...document.querySelectorAll('#section7-dum-equipment input[type=checkbox]:checked')];
+      const values = checked.map(ch => ch.dataset.value);
+      answers['house-equipment'] = values;
+      goToStep(currentStepIndex + 1);
+    });
+    document.getElementById('btn-back-7-dum-equipment').addEventListener('click', () => {
+      goToStep(currentStepIndex - 1);
+    });
+
+    // --- SPOLEČNÉ sekce ---
+
+    // Section 7 reason (společné)
+    let reasonSelected = null;
+    document.querySelectorAll('#section7-reason .option-btn-small').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#section7-reason .option-btn-small').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        reasonSelected = btn.dataset.value;
+        answers['reason'] = reasonSelected;
+        document.getElementById('btn-reason-next').disabled = false;
+      });
+    });
+    document.getElementById('btn-reason-next').addEventListener('click', () => {
+      if (reasonSelected) {
+        if (reasonSelected === 'Prodej') {
+          reasonIsProdej = true;
+          goToStep(currentStepIndex + 1);
+        } else {
+          reasonIsProdej = false;
+          // Přeskočit prodejní termín, jít rovnou na lokalitu
+          goToStep(currentStepIndex + 2);
+        }
+      }
+    });
+    document.getElementById('btn-back-7-reason').addEventListener('click', () => {
+      goToStep(currentStepIndex - 1);
+    });
+
+    // Section 8 sale term
+    let saleTermSelected = null;
+    document.querySelectorAll('#section8-sale-term .option-btn-small').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#section8-sale-term .option-btn-small').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        saleTermSelected = btn.dataset.value;
+        answers['sale-term'] = saleTermSelected;
+        document.getElementById('btn-sale-term-next').disabled = false;
+      });
+    });
+    document.getElementById('btn-sale-term-next').addEventListener('click', () => {
+      if (saleTermSelected) {
+        goToStep(currentStepIndex + 1);
+      }
+    });
+    document.getElementById('btn-back-8-sale').addEventListener('click', () => {
+      goToStep(currentStepIndex - 1);
+    });
+
+    // Section 9 location
+    const inputLocation = document.getElementById('input-location');
+    inputLocation.addEventListener('input', () => {
+      document.getElementById('btn-location-next').disabled = inputLocation.value.trim() === '';
+    });
+    document.getElementById('btn-location-next').addEventListener('click', () => {
+      if (inputLocation.value.trim() !== '') {
+        answers['location'] = inputLocation.value.trim();
+        goToStep(currentStepIndex + 1);
+      }
+    });
+    document.getElementById('btn-back-9-location').addEventListener('click', () => {
+      if (reasonIsProdej) {
+        goToStep(currentStepIndex - 1);
+      } else {
+        goToStep(currentStepIndex - 2);
+      }
+    });
+
+    // Section 10 extra info
+    const inputExtra = document.getElementById('input-extra');
+    document.getElementById('btn-info-next').addEventListener('click', () => {
+      answers['extra-info'] = inputExtra.value.trim();
+      goToStep(currentStepIndex + 1);
+    });
+    document.getElementById('btn-back-10-info').addEventListener('click', () => {
+      goToStep(currentStepIndex - 1);
+    });
+
+    // Section 11 contact
+    const inputName = document.getElementById('input-name');
+    const inputEmail = document.getElementById('input-email');
+    const inputPhone = document.getElementById('input-phone');
+    const inputConsent = document.getElementById('input-consent');
+    const btnSubmit = document.getElementById('btn-submit');
+
+    function validateContact() {
+      const nameOk = inputName.value.trim() !== '';
+      const emailOk = inputEmail.value.trim() !== '' && /\S+@\S+\.\S+/.test(inputEmail.value.trim());
+      const consentOk = inputConsent.checked;
+      btnSubmit.disabled = !(nameOk && emailOk && consentOk);
+    }
+    [inputName, inputEmail, inputConsent].forEach(el => {
+      el.addEventListener('input', validateContact);
+      el.addEventListener('change', validateContact);
+    });
+
+    btnSubmit.addEventListener('click', () => {
+      answers['name'] = inputName.value.trim();
+      answers['email'] = inputEmail.value.trim();
+      answers['phone'] = inputPhone.value.trim();
+      answers['consent'] = inputConsent.checked;
+
+      currentStepIndex = currentSteps.length - 1;
+      showSection(currentSteps[currentStepIndex]);
+      launchFireworks();
+
+      console.log('Vyplněné odpovědi:', answers);
+      // Tady můžeš přidat odeslání dat přes API, webhook, email, nebo Make.com integraci.
+    });
+    document.getElementById('btn-back-11-contact').addEventListener('click', () => {
+      goToStep(currentStepIndex - 1);
+    });
+
+    // Section 12 thanks
+    document.getElementById('btn-restart').addEventListener('click', () => {
+      // reset everything
+      for (const key in answers) delete answers[key];
+      selectedType = null;
+      reasonIsProdej = false;
+      flatSizeSelected = null;
+      flatConditionSelected = null;
+      heatingSelected = null;
+      balconySelected = null;
+      floorSelected = null;
+      houseSizeSelected = null;
+      houseTypeSelected = null;
+      houseConditionSelected = null;
+      houseHeatingSelected = null;
+      plotSizeSelected = null;
+      reasonSelected = null;
+      saleTermSelected = null;
+      inputLocation.value = '';
+      inputExtra.value = '';
+      inputName.value = '';
+      inputEmail.value = '';
+      inputPhone.value = '';
+      inputConsent.checked = false;
+      btnSubmit.disabled = true;
+
+      currentSteps = stepsByType.byt;
+      currentStepIndex = 0;
+      showSection(currentSteps[currentStepIndex]);
+    });
+
+    // Fireworks effect
+    const fireworksContainer = document.getElementById('fireworks-container');
+
+    function launchFireworks() {
+      const colors = ['#34d399', '#f87171', '#fbbf24', '#60a5fa', '#a78bfa'];
+      const fireworksCount = 25;
+      for(let i = 0; i < fireworksCount; i++) {
+        const firework = document.createElement('div');
+        firework.style.position = 'fixed';
+        firework.style.width = '8px';
+        firework.style.height = '8px';
+        firework.style.borderRadius = '50%';
+        firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        firework.style.top = `${Math.random() * 100}vh`;
+        firework.style.left = `${Math.random() * 100}vw`;
+        firework.style.opacity = 1;
+        firework.style.pointerEvents = 'none';
+        firework.style.zIndex = 10000;
+        fireworksContainer.appendChild(firework);
+
+        firework.animate([
+          { transform: 'scale(1) translate(0,0)', opacity: 1 },
+          { transform: `scale(3) translate(${(Math.random()-0.5)*300}px, ${(Math.random()-0.5)*300}px)`, opacity: 0 }
+        ], {
+          duration: 1800 + Math.random() * 1200,
+          easing: 'ease-out',
+          fill: 'forwards'
+        });
+
+        setTimeout(() => {
+          fireworksContainer.removeChild(firework);
+        }, 3000);
       }
     }
-  </script>
-  <script src="/form-logic.js"></script>
+
+    // Start with showing first section
+    showSection(currentSteps[currentStepIndex]);
+
+  })();
+</script>
 </body>
 </html>
